@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>6IXNIGHTS — Toronto Weekday Plans</title>
+  <meta name="description" content="Cheap weekday tickets to Jays &amp; Raptors games, hip-hop / R&B / reggae concerts, and the best clubs and bars in downtown Toronto." />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌃</text></svg>" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Archivo:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+
+  <header class="topbar">
+    <div class="wrap topbar-inner">
+      <a class="logo" href="#" id="logo">
+        <span class="logo-six">6IX</span><span class="logo-nights">NIGHTS</span>
+      </a>
+      <nav class="topnav" id="topnav">
+        <button class="navlink active" data-tab="sports">Sports</button>
+        <button class="navlink" data-tab="concerts">Concerts</button>
+        <button class="navlink" data-tab="nightlife">Nightlife</button>
+        <button class="navlink navlink-saved" data-tab="lineup">My Lineup <span class="saved-count" id="savedCount">0</span></button>
+      </nav>
+    </div>
+  </header>
+
+  <section class="hero">
+    <div class="wrap">
+      <p class="hero-kicker">Toronto · Weekday Edition</p>
+      <h1 class="hero-title">The week is not<br /><span class="grad">just for waiting.</span></h1>
+      <p class="hero-sub">
+        Cheap seats at the Jays and Raptors. Hip-hop, R&amp;B and reggae shows.
+        The right rooms on King West, Ossington and Yorkville — Monday to Thursday, when covers drop and the get-in price is a joke.
+      </p>
+
+      <div class="day-strip" id="dayStrip" role="group" aria-label="Filter by day of week">
+        <button class="day-chip" data-day="all">All days</button>
+        <button class="day-chip is-week" data-day="Mon">Mon</button>
+        <button class="day-chip is-week" data-day="Tue">Tue</button>
+        <button class="day-chip is-week" data-day="Wed">Wed</button>
+        <button class="day-chip is-week" data-day="Thu">Thu</button>
+        <button class="day-chip" data-day="Fri">Fri</button>
+        <button class="day-chip" data-day="Sat">Sat</button>
+        <button class="day-chip" data-day="Sun">Sun</button>
+        <button class="day-chip day-chip-weekdays active" data-day="weekdays">Mon–Thu only</button>
+      </div>
+    </div>
+  </section>
+
+  <main class="wrap main" id="main">
+
+    <!-- ===== SPORTS ===== -->
+    <section class="tab-panel active" id="panel-sports">
+      <div class="panel-head">
+        <h2>🏟 Cheap seats, big nights</h2>
+        <p>Weekday games are the arbitrage: same teams, same building, a fraction of the weekend price. Prices shown are typical get-in estimates — tap a ticket link for live prices.</p>
+      </div>
+
+      <div class="filter-row">
+        <div class="chip-group" id="sportsTeamFilter">
+          <button class="chip active" data-team="all">All teams</button>
+          <button class="chip" data-team="jays">Blue Jays</button>
+          <button class="chip" data-team="raptors">Raptors</button>
+          <button class="chip" data-team="leafs">Leafs</button>
+          <button class="chip" data-team="tfc">Toronto FC</button>
+          <button class="chip" data-team="argos">Argonauts</button>
+          <button class="chip" data-team="farm">905 / Marlies</button>
+        </div>
+        <div class="chip-group" id="sportsPriceFilter">
+          <button class="chip active" data-price="all">Any price</button>
+          <button class="chip" data-price="15">Under $15</button>
+          <button class="chip" data-price="30">Under $30</button>
+          <button class="chip" data-price="60">Under $60</button>
+        </div>
+      </div>
+
+      <div class="card-grid" id="sportsGrid"></div>
+      <p class="empty-note hidden" id="sportsEmpty">Nothing matches those filters — widen the days or price.</p>
+
+      <div class="playbook">
+        <h3>💸 The cheap-ticket playbook</h3>
+        <div class="playbook-grid">
+          <div class="playbook-item"><strong>Tuesday &amp; Wednesday Jays games</strong> are the cheapest in baseball's second city market — 500-level often under $15 on resale, and you can walk down after the 3rd inning.</div>
+          <div class="playbook-item"><strong>Buy day-of, after 4pm.</strong> Resale prices on StubHub / SeatGeek / Gametime collapse on weekday afternoons when sellers panic.</div>
+          <div class="playbook-item"><strong>Raptors 905 &amp; Marlies</strong> are the underrated move: pro-adjacent basketball and hockey for the price of two beers, and the arena bars are never a line.</div>
+          <div class="playbook-item"><strong>Leafs weekday tip:</strong> standing-room and 300-level singles against non-rival teams (think Columbus on a Tuesday) are the only affordable Leafs tickets that exist.</div>
+          <div class="playbook-item"><strong>TFC + BMO Field</strong> south-end supporters section is loud, cheap, and weekday matches regularly dip under $20.</div>
+          <div class="playbook-item"><strong>Student / under-30?</strong> Watch for Jays "Value Games" pricing tiers and Raptors mobile-only drops the morning of the game.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== CONCERTS ===== -->
+    <section class="tab-panel" id="panel-concerts">
+      <div class="panel-head">
+        <h2>🎤 Hip-hop · R&amp;B · Reggae</h2>
+        <p>Shows in the city that match the sound. Weekday shows sell slower — resale under face is common the day of. Dates and lineups move; always confirm on the venue link.</p>
+      </div>
+
+      <div class="filter-row">
+        <div class="chip-group" id="concertGenreFilter">
+          <button class="chip active" data-genre="all">All genres</button>
+          <button class="chip" data-genre="hiphop">Hip-Hop</button>
+          <button class="chip" data-genre="rnb">R&amp;B</button>
+          <button class="chip" data-genre="reggae">Reggae / Dancehall</button>
+          <button class="chip" data-genre="afro">Afrobeats</button>
+        </div>
+        <div class="chip-group" id="concertSizeFilter">
+          <button class="chip active" data-size="all">All venues</button>
+          <button class="chip" data-size="arena">Arena / Stadium</button>
+          <button class="chip" data-size="mid">Mid (History, Rebel…)</button>
+          <button class="chip" data-size="club">Club &amp; intimate</button>
+        </div>
+      </div>
+
+      <div class="card-grid" id="concertsGrid"></div>
+      <p class="empty-note hidden" id="concertsEmpty">No shows match — try widening the day filter.</p>
+
+      <div class="artist-watch">
+        <h3>👀 Artist watch — hometown &amp; heavy rotation</h3>
+        <p class="artist-watch-sub">No confirmed Toronto date right now, but when these drop, they go fast. Tap to set alerts.</p>
+        <div class="watch-grid" id="watchGrid"></div>
+      </div>
+    </section>
+
+    <!-- ===== NIGHTLIFE ===== -->
+    <section class="tab-panel" id="panel-nightlife">
+      <div class="panel-head">
+        <h2>🌃 Clubs &amp; bars that play the right music</h2>
+        <p>Rooms downtown where the DJ actually plays hip-hop, R&amp;B, dancehall and afrobeats — filtered by neighbourhood and the nights they actually go. Weeknights = short lines, low or no cover. Check Instagram day-of; programming changes weekly.</p>
+      </div>
+
+      <div class="filter-row">
+        <div class="chip-group" id="hoodFilter">
+          <button class="chip active" data-hood="all">All areas</button>
+          <button class="chip" data-hood="kingwest">King West</button>
+          <button class="chip" data-hood="ossington">Ossington</button>
+          <button class="chip" data-hood="yorkville">Yorkville</button>
+          <button class="chip" data-hood="queenwest">Queen West</button>
+          <button class="chip" data-hood="ent">Entertainment District</button>
+        </div>
+        <div class="chip-group" id="vibeFilter">
+          <button class="chip active" data-vibe="all">Any vibe</button>
+          <button class="chip" data-vibe="club">Full club</button>
+          <button class="chip" data-vibe="barclub">Bar → dancefloor</button>
+          <button class="chip" data-vibe="lounge">Lounge / cocktails</button>
+        </div>
+      </div>
+
+      <div class="card-grid" id="nightlifeGrid"></div>
+      <p class="empty-note hidden" id="nightlifeEmpty">Nothing in that area matches — try “All areas”.</p>
+
+      <div class="playbook">
+        <h3>🧭 Weeknight rules of the city</h3>
+        <div class="playbook-grid">
+          <div class="playbook-item"><strong>Thursday is the new Friday.</strong> King West rooms run Thursday programming that rivals weekends, at half the cover and a third of the line.</div>
+          <div class="playbook-item"><strong>Ossington is a bar crawl, not a club crawl.</strong> Start north of Queen and walk south; the good rooms announce DJs on Instagram same-day.</div>
+          <div class="playbook-item"><strong>Yorkville is a dress-code zone.</strong> No athletic wear, and tables carry minimums — go for the lounge side of the room on weeknights.</div>
+          <div class="playbook-item"><strong>Guest list &gt; cover.</strong> Almost every room downtown has a free-before-11 list via DM or their promoter link. Two minutes of effort saves $20–40.</div>
+          <div class="playbook-item"><strong>Last call is 2am.</strong> Kitchens close earlier — eat on King before 10pm or you're ending the night at a street dog cart (also a valid choice).</div>
+          <div class="playbook-item"><strong>TTC after midnight:</strong> Line 1 runs past 1:30am weekdays; Blue Night buses cover the rest. Surge pricing on rideshare peaks at 2:15am — wait it out with a shawarma.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== MY LINEUP ===== -->
+    <section class="tab-panel" id="panel-lineup">
+      <div class="panel-head">
+        <h2>📌 My Lineup</h2>
+        <p>Everything you've saved, in date order. Saved on this device only.</p>
+      </div>
+      <div class="card-grid" id="lineupGrid"></div>
+      <p class="empty-note" id="lineupEmpty">Nothing saved yet — hit the ☆ on any card to build your week.</p>
+    </section>
+
+  </main>
+
+  <footer class="footer">
+    <div class="wrap">
+      <p><span class="logo-six">6IX</span><span class="logo-nights">NIGHTS</span> — built for Toronto weeknights.</p>
+      <p class="footer-fine">Event details and prices are curated estimates and change constantly — always confirm on the ticket or venue link. Not affiliated with any venue, team, or artist. 19+ for nightlife listings. Drink water between sets.</p>
+    </div>
+  </footer>
+
+  <script src="js/data.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

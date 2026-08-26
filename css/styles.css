@@ -1,0 +1,376 @@
+/* ============ 6IXNIGHTS ============ */
+
+:root {
+  --bg: #0b0b10;
+  --bg-raised: #14141c;
+  --bg-card: #171722;
+  --bg-card-hover: #1d1d2b;
+  --line: #262636;
+  --text: #f2f0ec;
+  --text-dim: #a3a0b0;
+  --text-faint: #6f6c80;
+  --gold: #e8b64c;
+  --gold-soft: rgba(232, 182, 76, 0.14);
+  --purple: #8d6bf3;
+  --purple-soft: rgba(141, 107, 243, 0.16);
+  --red: #e0564f;
+  --green: #4fc98a;
+  --green-soft: rgba(79, 201, 138, 0.14);
+  --radius: 16px;
+  --font: "Archivo", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --mono: "JetBrains Mono", ui-monospace, "SF Mono", Menlo, monospace;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: var(--font);
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+}
+
+.wrap { max-width: 1100px; margin: 0 auto; padding: 0 20px; }
+
+button { font-family: inherit; cursor: pointer; }
+
+a { color: inherit; }
+
+.hidden { display: none !important; }
+
+/* ---------- top bar ---------- */
+
+.topbar {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: rgba(11, 11, 16, 0.88);
+  backdrop-filter: blur(14px);
+  border-bottom: 1px solid var(--line);
+}
+
+.topbar-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  height: 62px;
+}
+
+.logo { text-decoration: none; font-weight: 900; font-size: 1.25rem; letter-spacing: 0.02em; white-space: nowrap; }
+.logo-six { color: var(--gold); }
+.logo-nights { color: var(--text); }
+
+.topnav { display: flex; gap: 4px; overflow-x: auto; }
+
+.navlink {
+  background: none;
+  border: none;
+  color: var(--text-dim);
+  font-weight: 600;
+  font-size: 0.92rem;
+  padding: 8px 14px;
+  border-radius: 999px;
+  white-space: nowrap;
+  transition: color 0.15s, background 0.15s;
+}
+.navlink:hover { color: var(--text); }
+.navlink.active { background: var(--gold-soft); color: var(--gold); }
+
+.saved-count {
+  display: inline-block;
+  min-width: 20px;
+  text-align: center;
+  background: var(--purple);
+  color: #fff;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  padding: 1px 6px;
+  margin-left: 4px;
+}
+
+/* ---------- hero ---------- */
+
+.hero {
+  padding: 64px 0 40px;
+  background:
+    radial-gradient(ellipse 60% 50% at 15% 0%, rgba(141, 107, 243, 0.18), transparent),
+    radial-gradient(ellipse 50% 45% at 90% 10%, rgba(232, 182, 76, 0.12), transparent);
+  border-bottom: 1px solid var(--line);
+}
+
+.hero-kicker {
+  font-family: var(--mono);
+  font-size: 0.8rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 14px;
+}
+
+.hero-title {
+  font-size: clamp(2.4rem, 6vw, 4.2rem);
+  font-weight: 900;
+  line-height: 1.03;
+  letter-spacing: -0.02em;
+  margin-bottom: 18px;
+}
+
+.grad {
+  background: linear-gradient(92deg, var(--gold), var(--purple));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.hero-sub { max-width: 640px; color: var(--text-dim); font-size: 1.06rem; margin-bottom: 30px; }
+
+/* ---------- day strip ---------- */
+
+.day-strip { display: flex; flex-wrap: wrap; gap: 8px; padding-bottom: 26px; }
+
+.day-chip {
+  background: var(--bg-card);
+  border: 1px solid var(--line);
+  color: var(--text-dim);
+  font-weight: 700;
+  font-size: 0.85rem;
+  padding: 8px 15px;
+  border-radius: 10px;
+  transition: all 0.15s;
+}
+.day-chip:hover { border-color: var(--text-faint); color: var(--text); }
+.day-chip.active {
+  background: var(--gold);
+  border-color: var(--gold);
+  color: #14110a;
+}
+.day-chip-weekdays { border-style: dashed; }
+
+/* ---------- panels ---------- */
+
+.main { padding: 44px 20px 30px; }
+
+.tab-panel { display: none; }
+.tab-panel.active { display: block; animation: fadeUp 0.3s ease; }
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.panel-head { margin-bottom: 22px; }
+.panel-head h2 { font-size: 1.7rem; font-weight: 800; letter-spacing: -0.01em; margin-bottom: 8px; }
+.panel-head p { color: var(--text-dim); max-width: 720px; font-size: 0.97rem; }
+
+/* ---------- filters ---------- */
+
+.filter-row { display: flex; flex-direction: column; gap: 10px; margin-bottom: 24px; }
+
+.chip-group { display: flex; flex-wrap: wrap; gap: 7px; }
+
+.chip {
+  background: transparent;
+  border: 1px solid var(--line);
+  color: var(--text-dim);
+  font-weight: 600;
+  font-size: 0.82rem;
+  padding: 6px 13px;
+  border-radius: 999px;
+  transition: all 0.15s;
+}
+.chip:hover { border-color: var(--text-faint); color: var(--text); }
+.chip.active { background: var(--purple-soft); border-color: var(--purple); color: #c9b8ff; }
+
+/* ---------- cards ---------- */
+
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(310px, 1fr));
+  gap: 16px;
+}
+
+.card {
+  background: var(--bg-card);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  transition: transform 0.15s, border-color 0.15s, background 0.15s;
+  position: relative;
+}
+.card:hover { transform: translateY(-2px); border-color: #3a3a52; background: var(--bg-card-hover); }
+
+.card-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 8px; }
+
+.card-date {
+  font-family: var(--mono);
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--gold);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+.card-date .weekday-flag {
+  color: var(--green);
+  margin-left: 6px;
+}
+
+.save-btn {
+  background: none;
+  border: none;
+  font-size: 1.25rem;
+  line-height: 1;
+  color: var(--text-faint);
+  transition: color 0.15s, transform 0.1s;
+  padding: 2px;
+}
+.save-btn:hover { color: var(--gold); transform: scale(1.15); }
+.save-btn.saved { color: var(--gold); }
+
+.card-title { font-size: 1.12rem; font-weight: 800; letter-spacing: -0.01em; line-height: 1.25; }
+
+.card-venue { color: var(--text-dim); font-size: 0.88rem; }
+.card-venue .hood { color: var(--text-faint); }
+
+.card-desc { color: var(--text-dim); font-size: 0.88rem; flex: 1; }
+
+.tag-row { display: flex; flex-wrap: wrap; gap: 6px; }
+
+.tag {
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  padding: 3px 9px;
+  border-radius: 6px;
+  background: var(--bg-raised);
+  border: 1px solid var(--line);
+  color: var(--text-dim);
+}
+.tag.genre-hiphop { color: var(--gold); border-color: rgba(232,182,76,.35); }
+.tag.genre-rnb { color: #c9b8ff; border-color: rgba(141,107,243,.4); }
+.tag.genre-reggae { color: var(--green); border-color: rgba(79,201,138,.35); }
+.tag.genre-afro { color: #ff9d6b; border-color: rgba(255,157,107,.35); }
+.tag.deal { background: var(--green-soft); color: var(--green); border-color: rgba(79,201,138,.35); }
+
+.card-bottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  border-top: 1px solid var(--line);
+  padding-top: 12px;
+  margin-top: 2px;
+}
+
+.price { font-weight: 800; font-size: 1.05rem; }
+.price .from { display: block; font-size: 0.68rem; font-weight: 600; color: var(--text-faint); text-transform: uppercase; letter-spacing: 0.06em; }
+.price.cheap { color: var(--green); }
+.price.mid { color: var(--gold); }
+.price.high { color: var(--red); }
+
+.ticket-links { display: flex; gap: 6px; flex-wrap: wrap; justify-content: flex-end; }
+
+.tix-btn {
+  display: inline-block;
+  text-decoration: none;
+  font-size: 0.78rem;
+  font-weight: 700;
+  padding: 7px 12px;
+  border-radius: 8px;
+  border: 1px solid var(--line);
+  color: var(--text-dim);
+  background: var(--bg-raised);
+  transition: all 0.15s;
+}
+.tix-btn:hover { color: var(--text); border-color: var(--text-faint); }
+.tix-btn.primary {
+  background: var(--gold);
+  border-color: var(--gold);
+  color: #14110a;
+}
+.tix-btn.primary:hover { background: #f3c766; }
+
+/* ---------- playbook ---------- */
+
+.playbook { margin-top: 44px; }
+.playbook h3 { font-size: 1.25rem; font-weight: 800; margin-bottom: 16px; }
+
+.playbook-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 12px;
+}
+
+.playbook-item {
+  background: var(--bg-raised);
+  border: 1px solid var(--line);
+  border-left: 3px solid var(--gold);
+  border-radius: 10px;
+  padding: 14px 16px;
+  font-size: 0.89rem;
+  color: var(--text-dim);
+}
+.playbook-item strong { color: var(--text); display: block; margin-bottom: 3px; }
+
+/* ---------- artist watch ---------- */
+
+.artist-watch { margin-top: 44px; }
+.artist-watch h3 { font-size: 1.25rem; font-weight: 800; margin-bottom: 6px; }
+.artist-watch-sub { color: var(--text-dim); font-size: 0.9rem; margin-bottom: 16px; }
+
+.watch-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 12px;
+}
+
+.watch-card {
+  display: block;
+  text-decoration: none;
+  background: linear-gradient(135deg, var(--bg-card), var(--bg-raised));
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 16px;
+  transition: border-color 0.15s, transform 0.15s;
+}
+.watch-card:hover { border-color: var(--purple); transform: translateY(-2px); }
+.watch-name { font-weight: 800; font-size: 1.02rem; }
+.watch-note { color: var(--text-faint); font-size: 0.8rem; margin-top: 4px; }
+.watch-cta { color: var(--purple); font-size: 0.78rem; font-weight: 700; margin-top: 10px; display: block; }
+
+/* ---------- nightlife specifics ---------- */
+
+.nights-row { display: flex; gap: 5px; flex-wrap: wrap; }
+
+.night-dot {
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  font-weight: 600;
+  padding: 3px 7px;
+  border-radius: 5px;
+  background: var(--bg-raised);
+  border: 1px solid var(--line);
+  color: var(--text-faint);
+}
+.night-dot.on { background: var(--purple-soft); border-color: rgba(141,107,243,.5); color: #c9b8ff; }
+
+/* ---------- misc ---------- */
+
+.empty-note { color: var(--text-faint); text-align: center; padding: 40px 0; font-size: 0.95rem; }
+
+.footer { border-top: 1px solid var(--line); margin-top: 50px; padding: 30px 0 44px; }
+.footer p { font-weight: 700; }
+.footer-fine { color: var(--text-faint); font-size: 0.78rem; font-weight: 400 !important; margin-top: 8px; max-width: 640px; }
+
+@media (max-width: 640px) {
+  .hero { padding: 40px 0 26px; }
+  .topnav { -webkit-overflow-scrolling: touch; }
+  .card-grid { grid-template-columns: 1fr; }
+}
