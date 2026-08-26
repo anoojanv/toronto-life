@@ -602,6 +602,59 @@ a { color: inherit; }
 .ctx-fill.self { background: #b8841f; }
 .ctx-value { font-family: var(--mono); font-size: 0.78rem; color: var(--text); text-align: right; }
 
+/* ---------- HUD / pulse-net chrome ---------- */
+
+.hud-card {
+  position: relative;
+  background:
+    radial-gradient(ellipse 70% 60% at 50% 40%, rgba(141, 107, 243, 0.06), transparent),
+    var(--bg-card);
+  overflow: hidden;
+}
+.hud-card::before,
+.hud-card::after {
+  content: "";
+  position: absolute;
+  width: 22px;
+  height: 22px;
+  pointer-events: none;
+}
+.hud-card::before {
+  top: 10px; left: 10px;
+  border-top: 2px solid var(--gold);
+  border-left: 2px solid var(--gold);
+  opacity: 0.6;
+}
+.hud-card::after {
+  bottom: 10px; right: 10px;
+  border-bottom: 2px solid var(--gold);
+  border-right: 2px solid var(--gold);
+  opacity: 0.6;
+}
+
+.hud-title {
+  font-family: var(--mono);
+  font-size: 0.95rem !important;
+  letter-spacing: 0.12em;
+  display: flex;
+  align-items: center;
+  gap: 9px;
+}
+.hud-title-dim { color: var(--text-faint); font-weight: 400; letter-spacing: 0.06em; }
+
+.hud-status-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--green);
+  box-shadow: 0 0 8px var(--green);
+  animation: hudBlink 1.6s ease-in-out infinite;
+}
+@keyframes hudBlink { 0%, 100% { opacity: 1; } 50% { opacity: 0.35; } }
+@media (prefers-reduced-motion: reduce) { .hud-status-dot { animation: none; } }
+
+#pulseNet svg { max-width: 860px; margin: 0 auto; }
+
 @media (max-width: 760px) {
   .viz-two { grid-template-columns: 1fr; }
 }

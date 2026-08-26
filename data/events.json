@@ -1,7 +1,32 @@
 {
-  "lastUpdated": "2026-08-26T03:48:49.472Z",
+  "lastUpdated": "2026-08-26T04:11:17.450Z",
   "source": "curated",
   "sports": [
+    {
+      "id": "sp-jays-0901",
+      "team": "jays",
+      "date": "2026-09-01",
+      "title": "Blue Jays vs Rays",
+      "venue": "Rogers Centre",
+      "hood": "Downtown",
+      "price": 13,
+      "desc": "Tuesday night series opener — September weeknight baseball is the cheapest big-league ticket in the city.",
+      "tags": [
+        "⚾ MLB",
+        "Weeknight deal"
+      ],
+      "links": [
+        {
+          "label": "Ticketmaster",
+          "url": "https://www.ticketmaster.ca/toronto-blue-jays-tickets/artist/806032",
+          "primary": true
+        },
+        {
+          "label": "SeatGeek",
+          "url": "https://seatgeek.com/search?search=Toronto%20Blue%20Jays"
+        }
+      ]
+    },
     {
       "id": "sp-jays-0902",
       "team": "jays",
@@ -28,6 +53,104 @@
         {
           "label": "StubHub",
           "url": "https://www.stubhub.com/find/s/?q=Toronto%20Blue%20Jays"
+        }
+      ]
+    },
+    {
+      "id": "sp-jays-0903",
+      "team": "jays",
+      "date": "2026-09-03",
+      "title": "Blue Jays vs Rays",
+      "venue": "Rogers Centre",
+      "hood": "Downtown",
+      "price": 15,
+      "desc": "Thursday series finale — catch the game then walk to King West while the night is still young.",
+      "tags": [
+        "⚾ MLB",
+        "Pairs with King W"
+      ],
+      "links": [
+        {
+          "label": "Ticketmaster",
+          "url": "https://www.ticketmaster.ca/toronto-blue-jays-tickets/artist/806032",
+          "primary": true
+        },
+        {
+          "label": "SeatGeek",
+          "url": "https://seatgeek.com/search?search=Toronto%20Blue%20Jays"
+        }
+      ]
+    },
+    {
+      "id": "sp-jays-0911",
+      "team": "jays",
+      "date": "2026-09-11",
+      "title": "Blue Jays vs Orioles",
+      "venue": "Rogers Centre",
+      "hood": "Downtown",
+      "price": 22,
+      "desc": "AL East heavyweight series opener — Friday pricing, but the atmosphere earns it.",
+      "tags": [
+        "⚾ MLB",
+        "Rivalry series"
+      ],
+      "links": [
+        {
+          "label": "Ticketmaster",
+          "url": "https://www.ticketmaster.ca/toronto-blue-jays-tickets/artist/806032",
+          "primary": true
+        },
+        {
+          "label": "SeatGeek",
+          "url": "https://seatgeek.com/search?search=Toronto%20Blue%20Jays%20vs%20Orioles"
+        }
+      ]
+    },
+    {
+      "id": "sp-jays-0912",
+      "team": "jays",
+      "date": "2026-09-12",
+      "title": "Blue Jays vs Orioles",
+      "venue": "Rogers Centre",
+      "hood": "Downtown",
+      "price": 26,
+      "desc": "Saturday matinee against Baltimore — the weekend premium in action. Compare it to Monday's price.",
+      "tags": [
+        "⚾ MLB"
+      ],
+      "links": [
+        {
+          "label": "Ticketmaster",
+          "url": "https://www.ticketmaster.ca/toronto-blue-jays-tickets/artist/806032",
+          "primary": true
+        },
+        {
+          "label": "SeatGeek",
+          "url": "https://seatgeek.com/search?search=Toronto%20Blue%20Jays%20vs%20Orioles"
+        }
+      ]
+    },
+    {
+      "id": "sp-jays-0913",
+      "team": "jays",
+      "date": "2026-09-13",
+      "title": "Blue Jays vs Orioles",
+      "venue": "Rogers Centre",
+      "hood": "Downtown",
+      "price": 20,
+      "desc": "Sunday finale of the Baltimore series — roof open, day game, family crowd.",
+      "tags": [
+        "⚾ MLB"
+      ],
+      "links": [
+        {
+          "label": "Ticketmaster",
+          "url": "https://www.ticketmaster.ca/toronto-blue-jays-tickets/artist/806032",
+          "primary": true
+        },
+        {
+          "label": "SeatGeek",
+          "url": "https://seatgeek.com/search?search=Toronto%20Blue%20Jays"
         }
       ]
     },
@@ -60,11 +183,11 @@
       "id": "sp-jays-0915",
       "team": "jays",
       "date": "2026-09-15",
-      "title": "Blue Jays vs Tigers",
+      "title": "Blue Jays vs Tigers — Roberto Clemente Day",
       "venue": "Rogers Centre",
       "hood": "Downtown",
       "price": 13,
-      "desc": "Tuesday game two of the Detroit series. Roof open if the weather holds; patio beers on Blue Jays Way after.",
+      "desc": "Tuesday, game two vs Detroit, with the league honouring Clemente — every player wears 21.",
       "tags": [
         "⚾ MLB"
       ],
@@ -106,6 +229,80 @@
       ]
     },
     {
+      "id": "sp-jays-0925",
+      "team": "jays",
+      "date": "2026-09-25",
+      "title": "Blue Jays vs Reds — final homestand",
+      "venue": "Rogers Centre",
+      "hood": "Downtown",
+      "price": 18,
+      "desc": "The last regular-season home series starts tonight — final chance for Rogers Centre before any playoff run.",
+      "tags": [
+        "⚾ MLB",
+        "Final homestand"
+      ],
+      "links": [
+        {
+          "label": "Ticketmaster",
+          "url": "https://www.ticketmaster.ca/toronto-blue-jays-tickets/artist/806032",
+          "primary": true
+        },
+        {
+          "label": "SeatGeek",
+          "url": "https://seatgeek.com/search?search=Toronto%20Blue%20Jays%20vs%20Reds"
+        }
+      ]
+    },
+    {
+      "id": "sp-jays-0926",
+      "team": "jays",
+      "date": "2026-09-26",
+      "title": "Blue Jays vs Reds",
+      "venue": "Rogers Centre",
+      "hood": "Downtown",
+      "price": 22,
+      "desc": "Saturday of the final homestand — fan appreciation energy, giveaways likely.",
+      "tags": [
+        "⚾ MLB"
+      ],
+      "links": [
+        {
+          "label": "Ticketmaster",
+          "url": "https://www.ticketmaster.ca/toronto-blue-jays-tickets/artist/806032",
+          "primary": true
+        },
+        {
+          "label": "SeatGeek",
+          "url": "https://seatgeek.com/search?search=Toronto%20Blue%20Jays"
+        }
+      ]
+    },
+    {
+      "id": "sp-jays-0927",
+      "team": "jays",
+      "date": "2026-09-27",
+      "title": "Blue Jays vs Reds — home finale",
+      "venue": "Rogers Centre",
+      "hood": "Downtown",
+      "price": 20,
+      "desc": "Last home game of the regular season. Sunday afternoon, likely emotional, definitely worth it.",
+      "tags": [
+        "⚾ MLB",
+        "Home finale"
+      ],
+      "links": [
+        {
+          "label": "Ticketmaster",
+          "url": "https://www.ticketmaster.ca/toronto-blue-jays-tickets/artist/806032",
+          "primary": true
+        },
+        {
+          "label": "SeatGeek",
+          "url": "https://seatgeek.com/search?search=Toronto%20Blue%20Jays"
+        }
+      ]
+    },
+    {
       "id": "sp-tfc-0923",
       "team": "tfc",
       "date": "2026-09-23",
@@ -131,6 +328,30 @@
       ]
     },
     {
+      "id": "sp-tfc-1003",
+      "team": "tfc",
+      "date": "2026-10-03",
+      "title": "Toronto FC — October home match",
+      "venue": "BMO Field",
+      "hood": "Exhibition Place",
+      "price": 20,
+      "desc": "Late-season MLS with playoff implications on the lakefront — crisp air, loud south end.",
+      "tags": [
+        "⚽ MLS"
+      ],
+      "links": [
+        {
+          "label": "Ticketmaster",
+          "url": "https://www.ticketmaster.ca/search?q=Toronto%20FC",
+          "primary": true
+        },
+        {
+          "label": "SeatGeek",
+          "url": "https://seatgeek.com/search?search=Toronto%20FC"
+        }
+      ]
+    },
+    {
       "id": "sp-argos-1002",
       "team": "argos",
       "date": "2026-10-02",
@@ -142,6 +363,30 @@
       "tags": [
         "🏈 CFL",
         "Under $20"
+      ],
+      "links": [
+        {
+          "label": "Ticketmaster",
+          "url": "https://www.ticketmaster.ca/search?q=Toronto%20Argonauts",
+          "primary": true
+        },
+        {
+          "label": "SeatGeek",
+          "url": "https://seatgeek.com/search?search=Toronto%20Argonauts"
+        }
+      ]
+    },
+    {
+      "id": "sp-argos-1024",
+      "team": "argos",
+      "date": "2026-10-24",
+      "title": "Argonauts — late-October matchup",
+      "venue": "BMO Field",
+      "hood": "Exhibition Place",
+      "price": 16,
+      "desc": "Final stretch of the CFL season — bring a layer, the lake wind is real by late October.",
+      "tags": [
+        "🏈 CFL"
       ],
       "links": [
         {
@@ -185,6 +430,80 @@
       ]
     },
     {
+      "id": "sp-raps-1014",
+      "team": "raptors",
+      "date": "2026-10-14",
+      "title": "Raptors preseason — game two",
+      "venue": "Scotiabank Arena",
+      "hood": "Downtown",
+      "price": 18,
+      "desc": "Wednesday preseason: rotations are experimental, seats are cheap, and the new guys play real minutes.",
+      "tags": [
+        "🏀 NBA",
+        "Preseason value"
+      ],
+      "links": [
+        {
+          "label": "Ticketmaster",
+          "url": "https://www.ticketmaster.ca/search?q=Toronto%20Raptors",
+          "primary": true
+        },
+        {
+          "label": "SeatGeek",
+          "url": "https://seatgeek.com/search?search=Toronto%20Raptors"
+        }
+      ]
+    },
+    {
+      "id": "sp-raps-1028",
+      "team": "raptors",
+      "date": "2026-10-28",
+      "title": "Raptors — early-season weeknight game",
+      "venue": "Scotiabank Arena",
+      "hood": "Downtown",
+      "price": 28,
+      "desc": "October/November Wednesdays vs non-marquee teams are the sweet spot before holiday pricing kicks in.",
+      "tags": [
+        "🏀 NBA",
+        "Weeknight sweet spot"
+      ],
+      "links": [
+        {
+          "label": "Ticketmaster",
+          "url": "https://www.ticketmaster.ca/search?q=Toronto%20Raptors",
+          "primary": true
+        },
+        {
+          "label": "SeatGeek",
+          "url": "https://seatgeek.com/search?search=Toronto%20Raptors"
+        }
+      ]
+    },
+    {
+      "id": "sp-raps-1104",
+      "team": "raptors",
+      "date": "2026-11-04",
+      "title": "Raptors — November weeknight game",
+      "venue": "Scotiabank Arena",
+      "hood": "Downtown",
+      "price": 26,
+      "desc": "Early-November Wednesday hoops — resale softens all afternoon on game day. Watch for mobile-only drops.",
+      "tags": [
+        "🏀 NBA"
+      ],
+      "links": [
+        {
+          "label": "Ticketmaster",
+          "url": "https://www.ticketmaster.ca/search?q=Toronto%20Raptors",
+          "primary": true
+        },
+        {
+          "label": "SeatGeek",
+          "url": "https://seatgeek.com/search?search=Toronto%20Raptors"
+        }
+      ]
+    },
+    {
       "id": "sp-leafs-1013",
       "team": "leafs",
       "date": "2026-10-13",
@@ -214,27 +533,26 @@
       ]
     },
     {
-      "id": "sp-raps-1028",
-      "team": "raptors",
-      "date": "2026-10-28",
-      "title": "Raptors — early-season weeknight game",
+      "id": "sp-leafs-1103",
+      "team": "leafs",
+      "date": "2026-11-03",
+      "title": "Maple Leafs — November weeknight game",
       "venue": "Scotiabank Arena",
       "hood": "Downtown",
-      "price": 28,
-      "desc": "October/November Wednesdays vs non-marquee teams are the sweet spot before holiday pricing kicks in.",
+      "price": 58,
+      "desc": "Tuesday-night hockey: still pricey because it's the Leafs, but this is as low as it gets in-season.",
       "tags": [
-        "🏀 NBA",
-        "Weeknight sweet spot"
+        "🏒 NHL"
       ],
       "links": [
         {
           "label": "Ticketmaster",
-          "url": "https://www.ticketmaster.ca/search?q=Toronto%20Raptors",
+          "url": "https://www.ticketmaster.ca/search?q=Toronto%20Maple%20Leafs",
           "primary": true
         },
         {
           "label": "SeatGeek",
-          "url": "https://seatgeek.com/search?search=Toronto%20Raptors"
+          "url": "https://seatgeek.com/search?search=Toronto%20Maple%20Leafs"
         }
       ]
     },
@@ -291,7 +609,7 @@
   ],
   "concerts": [
     {
-      "id": "c-firstclass",
+      "id": "c-firstclass1",
       "genres": [
         "hiphop"
       ],
@@ -300,7 +618,7 @@
       "title": "First Class Fest — Day 1 (Osamason, Lancey Foux)",
       "venue": "The Bowl, Sobeys Stadium",
       "price": 65,
-      "desc": "Underground rap festival takeover — day two runs Saturday with Lucki and Nettspend.",
+      "desc": "Underground rap festival takeover — the rage-rap end of the spectrum, all night.",
       "links": [
         {
           "label": "Tickets",
@@ -310,6 +628,52 @@
         {
           "label": "SeatGeek",
           "url": "https://seatgeek.com/search?search=First%20Class%20Fest%20Toronto"
+        }
+      ]
+    },
+    {
+      "id": "c-firstclass2",
+      "genres": [
+        "hiphop"
+      ],
+      "size": "mid",
+      "date": "2026-08-29",
+      "title": "First Class Fest — Day 2 (Lucki, Nettspend)",
+      "venue": "The Bowl, Sobeys Stadium",
+      "price": 65,
+      "desc": "Day two of the underground rap festival — Lucki headlines Saturday.",
+      "links": [
+        {
+          "label": "Tickets",
+          "url": "https://www.ticketmaster.ca/search?q=First%20Class%20Fest",
+          "primary": true
+        },
+        {
+          "label": "SeatGeek",
+          "url": "https://seatgeek.com/search?search=First%20Class%20Fest%20Toronto"
+        }
+      ]
+    },
+    {
+      "id": "c-isaiahrashad",
+      "genres": [
+        "hiphop"
+      ],
+      "size": "mid",
+      "date": "2026-08-30",
+      "title": "Isaiah Rashad — Lil Sunny's Awful Road Trip",
+      "venue": "Rebel",
+      "price": 55,
+      "desc": "TDE's smoothest on the waterfront — Sunday show, so Monday you is someone else's problem.",
+      "links": [
+        {
+          "label": "Ticketmaster",
+          "url": "https://www.ticketmaster.ca/rebel-tickets-toronto/venue/131074",
+          "primary": true
+        },
+        {
+          "label": "SeatGeek",
+          "url": "https://seatgeek.com/search?search=Isaiah%20Rashad%20Toronto"
         }
       ]
     },
@@ -389,6 +753,53 @@
       ]
     },
     {
+      "id": "c-playgrnd",
+      "genres": [
+        "hiphop",
+        "rnb"
+      ],
+      "size": "mid",
+      "date": "2026-09-11",
+      "title": "Playgrnd Series — Toronto anniversary party",
+      "venue": "Rebel",
+      "price": 30,
+      "desc": "The hip-hop/R&B party series takes over the waterfront mega-club for its anniversary — DJ-driven, all vibes.",
+      "links": [
+        {
+          "label": "Rebel events",
+          "url": "https://rebeltoronto.com/events/",
+          "primary": true
+        },
+        {
+          "label": "Ticketmaster",
+          "url": "https://www.ticketmaster.ca/rebel-tickets-toronto/venue/131074"
+        }
+      ]
+    },
+    {
+      "id": "c-channeltres",
+      "genres": [
+        "rnb"
+      ],
+      "size": "mid",
+      "date": "2026-09-14",
+      "title": "Channel Tres — The Enigma Tour",
+      "venue": "Danforth Music Hall",
+      "price": 40,
+      "desc": "Compton's house-and-R&B shapeshifter on a Monday night — the exact energy this app exists for.",
+      "links": [
+        {
+          "label": "Danforth calendar",
+          "url": "https://www.thedanforth.com/shows",
+          "primary": true
+        },
+        {
+          "label": "Ticketmaster",
+          "url": "https://www.ticketmaster.ca/the-danforth-music-hall-tickets-toronto/venue/131101"
+        }
+      ]
+    },
+    {
       "id": "c-history-rnb",
       "genres": [
         "rnb"
@@ -449,7 +860,7 @@
       "links": [
         {
           "label": "Rebel events",
-          "url": "https://www.ticketmaster.ca/search?q=Rebel%20Toronto",
+          "url": "https://rebeltoronto.com/events/",
           "primary": true
         },
         {
@@ -482,6 +893,29 @@
       ]
     },
     {
+      "id": "c-massey-soul",
+      "genres": [
+        "rnb"
+      ],
+      "size": "mid",
+      "date": "2026-09-30",
+      "title": "Soul & R&B night — Massey Hall (rotating bill)",
+      "venue": "Massey Hall",
+      "price": 45,
+      "desc": "The city's most beautiful room books touring soul and R&B midweek — sit anywhere, the acoustics forgive nothing and reward everything.",
+      "links": [
+        {
+          "label": "Massey Hall calendar",
+          "url": "https://masseyhall.mhrth.com/tickets/",
+          "primary": true
+        },
+        {
+          "label": "SeatGeek",
+          "url": "https://seatgeek.com/search?search=Massey%20Hall%20Toronto"
+        }
+      ]
+    },
+    {
       "id": "c-reggae-danforth",
       "genres": [
         "reggae"
@@ -494,8 +928,8 @@
       "desc": "The Danforth is Toronto's default room for touring reggae and dancehall acts — watch for Popcaan, Kranium, and Protoje-tier bookings.",
       "links": [
         {
-          "label": "Ticketmaster",
-          "url": "https://www.ticketmaster.ca/search?q=Danforth%20Music%20Hall%20reggae",
+          "label": "Danforth calendar",
+          "url": "https://www.thedanforth.com/shows",
           "primary": true
         },
         {
@@ -524,6 +958,53 @@
         {
           "label": "SeatGeek",
           "url": "https://seatgeek.com/search?search=afrobeats%20Toronto"
+        }
+      ]
+    },
+    {
+      "id": "c-dancehall-coliseum",
+      "genres": [
+        "reggae",
+        "afro"
+      ],
+      "size": "mid",
+      "date": "2026-10-16",
+      "title": "Dancehall & afrobeats — Coca-Cola Coliseum (touring bill)",
+      "venue": "Coca-Cola Coliseum",
+      "price": 55,
+      "desc": "The Exhibition Place arena hosts the bigger Caribbean and West African tours — Friday-night carnival energy indoors.",
+      "links": [
+        {
+          "label": "Ticketmaster",
+          "url": "https://www.ticketmaster.ca/search?q=Coca-Cola%20Coliseum",
+          "primary": true
+        },
+        {
+          "label": "SeatGeek",
+          "url": "https://seatgeek.com/search?search=Coca-Cola%20Coliseum%20Toronto"
+        }
+      ]
+    },
+    {
+      "id": "c-velvet-oct",
+      "genres": [
+        "hiphop"
+      ],
+      "size": "club",
+      "date": "2026-10-21",
+      "title": "Midweek rap bill — Velvet Underground",
+      "venue": "Velvet Underground",
+      "price": 22,
+      "desc": "Wednesday club show on Queen West — $20-something for artists who'll cost $60 next tour.",
+      "links": [
+        {
+          "label": "Ticketmaster",
+          "url": "https://www.ticketmaster.ca/search?q=Velvet%20Underground%20Toronto",
+          "primary": true
+        },
+        {
+          "label": "SeatGeek",
+          "url": "https://seatgeek.com/search?search=Velvet%20Underground%20Toronto"
         }
       ]
     }
@@ -599,6 +1080,7 @@
         "rnb"
       ],
       "nights": [
+        "Wed",
         "Thu",
         "Fri",
         "Sat"
@@ -645,6 +1127,7 @@
         "latin"
       ],
       "nights": [
+        "Wed",
         "Thu",
         "Fri",
         "Sat"
@@ -733,14 +1216,16 @@
         "top40"
       ],
       "nights": [
+        "Tue",
         "Wed",
         "Thu",
         "Fri",
-        "Sat"
+        "Sat",
+        "Sun"
       ],
       "cover": "Usually free early",
       "coverMin": 0,
-      "desc": "Rooftop over Adelaide — patio season weeknights with hip-hop-leaning DJs and skyline views. Closes when it rains, obviously.",
+      "desc": "Rooftop over Adelaide — open most nights in patio season with hip-hop-leaning DJs and skyline views. Peak nights Thu–Sat.",
       "address": "250 Adelaide St W",
       "lat": 43.6479,
       "lng": -79.3892
@@ -756,14 +1241,17 @@
         "rnb"
       ],
       "nights": [
+        "Mon",
+        "Tue",
         "Wed",
         "Thu",
         "Fri",
-        "Sat"
+        "Sat",
+        "Sun"
       ],
       "cover": "Free most nights",
       "coverMin": 0,
-      "desc": "Apartment-styled bar with pool table and a hip-hop soundtrack all week — the best free weeknight hang on this list.",
+      "desc": "Apartment-styled bar with pool table and a hip-hop soundtrack seven nights a week — the best free weeknight hang on this list.",
       "address": "1034 Queen St W",
       "lat": 43.6437,
       "lng": -79.4187
@@ -802,6 +1290,7 @@
         "rnb"
       ],
       "nights": [
+        "Tue",
         "Wed",
         "Thu",
         "Fri",
@@ -848,14 +1337,16 @@
         "dancehall"
       ],
       "nights": [
+        "Tue",
         "Wed",
         "Thu",
         "Fri",
-        "Sat"
+        "Sat",
+        "Sun"
       ],
       "cover": "Free",
       "coverMin": 0,
-      "desc": "Haitian rum bar on Dundas West — dancehall, kompa and reggae on the speakers, rum punch in hand. The weeknight reggae fix.",
+      "desc": "Haitian rum bar on Dundas West — dancehall, kompa and reggae on the speakers six nights a week, rum punch in hand. The weeknight reggae fix.",
       "address": "926 Dundas St W",
       "lat": 43.6516,
       "lng": -79.4176
@@ -872,6 +1363,7 @@
         "house"
       ],
       "nights": [
+        "Wed",
         "Thu",
         "Fri",
         "Sat"
@@ -917,6 +1409,7 @@
         "hiphop"
       ],
       "nights": [
+        "Wed",
         "Thu",
         "Fri",
         "Sat"

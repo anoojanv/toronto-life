@@ -72,71 +72,151 @@
       .join("");
   }
 
-  /* ---------- timeline: next 14 nights ---------- */
+  /* ---------- PULSE.NET: radial radar of the next 14 nights ----------
+     Centre = tonight; ring distance = how soon; three 120° sectors group
+     sports (amber), concerts (purple), and nightlife venues (teal, plotted
+     at their next open night). Every node is clickable. */
 
-  function renderTimeline(S) {
-    const { state, esc, fmtDate, dayOf, WEEKDAYS } = S;
-    const el = document.getElementById("timelineViz");
+  function renderPulseNet(S) {
+    const { state, esc, fmtDate, dayOf, todayDayName } = S;
+    const el = document.getElementById("pulseNet");
+    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-    const days = [];
-    const now = new Date();
-    for (let i = 0; i < 14; i++) {
-      const d = new Date(now.getFullYear(), now.getMonth(), now.getDate() + i);
-      days.push({
-        iso: d.toLocaleDateString("en-CA"),
-        label: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"][d.getDay()],
-        num: d.getDate(),
+    const W = 1000, H = 700, CX = W / 2, CY = H / 2;
+    const R0 = 64, R1 = 308;
+    const rOf = (day) => R0 + (R1 - R0) * Math.sqrt(Math.min(day, 14) / 14);
+    // compass angle: 0 = north, clockwise
+    const pos = (deg, r) => {
+      const a = (deg * Math.PI) / 180;
+      return [CX + r * Math.sin(a), CY - r * Math.cos(a)];
+    };
+
+    // Anchor "tonight" to Toronto, not the viewer's clock
+    const [ty, tm, td] = S.todayISO().split("-").map(Number);
+    const midnight = new Date(ty, tm - 1, td);
+    const daysUntil = (iso) => {
+      const [y, m, d] = iso.split("-").map(Number);
+      return Math.round((new Date(y, m - 1, d) - midnight) / 86400000);
+    };
+    const DAY_SEQ = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+    const todayIdx = midnight.getDay();
+    const nextOpenIn = (nights) => {
+      for (let i = 0; i < 7; i++) {
+        if (nights.includes(DAY_SEQ[(todayIdx + i) % 7])) return i;
+      }
+      return null;
+    };
+
+    const nodes = [];
+    state.data.sports.forEach((e) => {
+      const d = daysUntil(e.date);
+      if (d >= 0 && d <= 14) nodes.push({ kind: "sports", day: d, item: e });
+    });
+    state.data.concerts.forEach((e) => {
+      const d = daysUntil(e.date);
+      if (d >= 0 && d <= 14) nodes.push({ kind: "concerts", day: d, item: e });
+    });
+    state.data.nightlife.forEach((v) => {
+      const d = nextOpenIn(v.nights);
+      if (d !== null) nodes.push({ kind: "lounge", vibe: v.vibe, day: d, item: v, venue: true });
+    });
+
+    // sectors: [startDeg, endDeg]
+    const SECTORS = {
+      sports: [244, 356],
+      concerts: [4, 116],
+      lounge: [124, 236],
+    };
+    ["sports", "concerts", "lounge"].forEach((k) => {
+      const group = nodes.filter((n) => n.kind === k).sort((a, b) => a.day - b.day || String(a.item.id).localeCompare(b.item.id));
+      const [s, e] = SECTORS[k];
+      group.forEach((n, i) => {
+        n.angle = s + ((i + 0.5) / group.length) * (e - s);
+        n.r = rOf(n.day) + (i % 2 ? 7 : -7); // de-shell slightly so same-day nodes don't fuse
       });
-    }
-    const byDate = {};
-    state.data.sports.forEach((e) => (byDate[e.date] = byDate[e.date] || []).push({ ...e, kind: "sports" }));
-    state.data.concerts.forEach((e) => (byDate[e.date] = byDate[e.date] || []).push({ ...e, kind: "concerts" }));
+    });
 
-    const COL = 66, W = COL * 14, H = 240, TOP = 18, BOT = 44;
-    const plotH = H - TOP - BOT;
-    const events = days.flatMap((d) => byDate[d.iso] || []);
-    const maxP = Math.max(40, ...events.map((e) => e.price));
-    const y = (p) => TOP + plotH - (p / maxP) * plotH;
+    let cheapest = null;
+    nodes.forEach((n) => { if (!n.venue && (!cheapest || n.item.price < cheapest.item.price)) cheapest = n; });
 
-    const gridLines = [0, Math.round(maxP / 2), maxP].map((p) => `
-      <line x1="0" x2="${W}" y1="${y(p)}" y2="${y(p)}" stroke="${C.grid}" stroke-width="1" />
-      <text x="4" y="${y(p) - 4}" fill="${C.inkFaint}" font-size="10" font-family="JetBrains Mono, monospace">$${p}</text>`).join("");
+    const rings = [1, 3, 7, 14].map((d) => `
+      <circle cx="${CX}" cy="${CY}" r="${rOf(d)}" fill="none" stroke="${C.grid}" stroke-width="1" ${d === 14 ? "" : 'stroke-dasharray="2 5"'} />
+      <text x="${CX + 6}" y="${CY - rOf(d) - 5}" fill="${C.inkFaint}" font-size="11" font-family="JetBrains Mono, monospace">+${d}</text>`).join("");
 
-    const cols = days.map((d, i) => {
-      const isWk = WEEKDAYS.includes(d.label);
-      const x = i * COL;
-      return `
-        ${isWk ? `<rect x="${x}" y="${TOP - 6}" width="${COL}" height="${plotH + 12}" fill="rgba(232,182,76,0.05)" />` : ""}
-        <text x="${x + COL / 2}" y="${H - 24}" text-anchor="middle" fill="${isWk ? C.inkStrong : C.inkFaint}" font-size="11" font-weight="700" font-family="Archivo, sans-serif">${d.label}</text>
-        <text x="${x + COL / 2}" y="${H - 9}" text-anchor="middle" fill="${C.inkFaint}" font-size="10" font-family="JetBrains Mono, monospace">${d.num}</text>`;
+    const spokes = [0, 120, 240].map((deg) => {
+      const [x1, y1] = pos(deg, R0 - 12);
+      const [x2, y2] = pos(deg, R1 + 14);
+      return `<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="${C.grid}" stroke-width="1" stroke-dasharray="3 7" />`;
     }).join("");
 
-    let cheapestInWindow = null;
-    events.forEach((e) => { if (!cheapestInWindow || e.price < cheapestInWindow.price) cheapestInWindow = e; });
+    const sectorLabel = (deg, r, text, color) => {
+      const [x, y] = pos(deg, r);
+      return `<text x="${x}" y="${y}" text-anchor="middle" fill="${color}" opacity="0.85" font-size="13" font-weight="800" letter-spacing="4" font-family="Archivo, sans-serif">${text}</text>`;
+    };
+    const labels =
+      sectorLabel(300, R1 + 34, "SPORTS", C.sports) +
+      sectorLabel(60, R1 + 34, "CONCERTS", C.concerts) +
+      sectorLabel(180, R1 + 40, "NIGHTLIFE", C.lounge);
 
-    const dots = days.map((d, i) => {
-      const evs = (byDate[d.iso] || []).slice().sort((a, b) => a.price - b.price);
-      const n = evs.length;
-      return evs.map((e, j) => {
-        const cx = i * COL + COL / 2 + (n > 1 ? (j - (n - 1) / 2) * 14 : 0);
-        const cy = y(Math.min(e.price, maxP));
-        const tip = `<strong>${esc(e.title)}</strong><br>${esc(fmtDate(e.date))} · ${esc(e.venue)}<br>est. from <strong>$${e.price}</strong> · click for details`;
-        const label = cheapestInWindow && e.id === cheapestInWindow.id
-          ? `<text x="${cx}" y="${cy - 14}" text-anchor="middle" fill="${C.inkStrong}" font-size="10" font-weight="700" font-family="Archivo, sans-serif">$${e.price} ↓</text>` : "";
-        return `${label}
-          <circle cx="${cx}" cy="${cy}" r="6" fill="${C[e.kind]}" stroke="${C.surface}" stroke-width="2" pointer-events="none" />
-          <circle cx="${cx}" cy="${cy}" r="12" fill="transparent" style="cursor:pointer" data-open="${esc(e.id)}" data-tip="${esc(tip)}" />`;
-      }).join("");
+    const sweep = reduceMotion ? "" : `
+      <path d="M ${CX} ${CY} L ${pos(0, R1)} A ${R1} ${R1} 0 0 1 ${pos(34, R1)} Z" fill="url(#sweepGrad)" opacity="0.55">
+        <animateTransform attributeName="transform" type="rotate" from="0 ${CX} ${CY}" to="360 ${CX} ${CY}" dur="9s" repeatCount="indefinite" />
+      </path>`;
+
+    const nodeMarkup = nodes.map((n, i) => {
+      const [x, y] = pos(n.angle, n.r);
+      const color = n.venue ? C.lounge : C[n.kind]; // venues read as one teal family here; vibe detail lives on the map
+      const it = n.item;
+      const when = n.day === 0 ? "tonight" : n.day === 1 ? "tomorrow" : `in ${n.day} nights`;
+      const tip = n.venue
+        ? `<strong>${esc(it.name)}</strong><br>${esc(it.hoodLabel)} · next open <strong>${esc(when)}</strong><br>${esc(it.cover)} · click to open`
+        : `<strong>${esc(it.title)}</strong><br>${esc(fmtDate(it.date))} (${esc(when)}) · ${esc(it.venue)}<br>est. from <strong>$${it.price}</strong> · click to open`;
+      const ping = reduceMotion ? "" : `
+        <circle cx="${x}" cy="${y}" r="6" fill="none" stroke="${color}" stroke-width="1.5" opacity="0" pointer-events="none">
+          <animate attributeName="r" values="6;22" dur="3s" begin="${(i % 6) * 0.5}s" repeatCount="indefinite" />
+          <animate attributeName="opacity" values="0.7;0" dur="3s" begin="${(i % 6) * 0.5}s" repeatCount="indefinite" />
+        </circle>`;
+      const link = `<line x1="${CX}" y1="${CY}" x2="${x}" y2="${y}" stroke="${color}" stroke-width="1" opacity="0.14" pointer-events="none" />`;
+      const cheapTag = cheapest === n
+        ? `<text x="${x}" y="${y + 24}" text-anchor="middle" fill="${C.inkStrong}" font-size="11" font-weight="700" font-family="JetBrains Mono, monospace">$${it.price} · CHEAPEST</text>` : "";
+      return `${link}${ping}${cheapTag}
+        <circle cx="${x}" cy="${y}" r="6.5" fill="${color}" stroke="${C.surface}" stroke-width="2" filter="url(#nodeGlow)" pointer-events="none" />
+        <circle cx="${x}" cy="${y}" r="14" fill="transparent" style="cursor:pointer" data-open="${esc(it.id)}" data-tip="${esc(tip)}" />`;
     }).join("");
+
+    const hubPulse = reduceMotion ? "" : `
+      <circle cx="${CX}" cy="${CY}" r="10" fill="none" stroke="${C.sports}" stroke-width="1.5" opacity="0">
+        <animate attributeName="r" values="10;40" dur="2.6s" repeatCount="indefinite" />
+        <animate attributeName="opacity" values="0.6;0" dur="2.6s" repeatCount="indefinite" />
+      </circle>`;
+    const dateStr = `${String(tm).padStart(2, "0")}/${String(td).padStart(2, "0")}`;
+    const hub = `
+      ${hubPulse}
+      <circle cx="${CX}" cy="${CY}" r="34" fill="${C.surface}" stroke="${C.grid}" stroke-width="1.5" />
+      <circle cx="${CX}" cy="${CY}" r="5" fill="${C.inkStrong}" filter="url(#nodeGlow)" />
+      <text x="${CX}" y="${CY + 18}" text-anchor="middle" fill="${C.ink}" font-size="10" letter-spacing="2" font-family="JetBrains Mono, monospace">NOW</text>
+      <text x="${CX}" y="${CY - 44}" text-anchor="middle" fill="${C.inkFaint}" font-size="11" font-family="JetBrains Mono, monospace">${todayDayName().toUpperCase()} ${dateStr}</text>`;
 
     el.innerHTML = `
-      <svg viewBox="0 0 ${W} ${H}" width="${W}" height="${H}" role="img" aria-label="Timeline of events over the next 14 nights, dot height showing estimated price">
-        ${gridLines}${cols}${dots}
+      <svg viewBox="0 0 ${W} ${H}" style="width:100%;height:auto;display:block" role="img"
+           aria-label="Radar view of the next 14 nights: sports, concerts and nightlife nodes placed by how soon they happen. Each node is clickable.">
+        <defs>
+          <filter id="nodeGlow" x="-80%" y="-80%" width="260%" height="260%">
+            <feGaussianBlur stdDeviation="2.2" result="b" />
+            <feMerge><feMergeNode in="b" /><feMergeNode in="SourceGraphic" /></feMerge>
+          </filter>
+          <linearGradient id="sweepGrad" x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0%" stop-color="${C.sports}" stop-opacity="0" />
+            <stop offset="100%" stop-color="${C.sports}" stop-opacity="0.10" />
+          </linearGradient>
+        </defs>
+        ${sweep}${rings}${spokes}${labels}${nodeMarkup}${hub}
       </svg>`;
 
     document.getElementById("timelineLegend").innerHTML = `
       <span class="legend-item"><span class="legend-dot" style="background:${C.sports}"></span>Sports</span>
-      <span class="legend-item"><span class="legend-dot" style="background:${C.concerts}"></span>Concerts</span>`;
+      <span class="legend-item"><span class="legend-dot" style="background:${C.concerts}"></span>Concerts</span>
+      <span class="legend-item"><span class="legend-dot" style="background:${C.lounge}"></span>Venues</span>`;
 
     bindTips(el);
   }
@@ -287,7 +367,7 @@
     const S = window.SIX;
     if (!S || !S.state.data) return;
     renderStats(S);
-    renderTimeline(S);
+    renderPulseNet(S);
     renderPriceByDay(S);
     renderTonight(S);
     renderMap(S);
