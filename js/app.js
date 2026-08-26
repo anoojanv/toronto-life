@@ -1,13 +1,24 @@
-/* 6IXNIGHTS app logic — tabs, filters, rendering, saved lineup */
+/* 6IXNIGHTS app core — data loading, tabs, filters, grids, detail modal.
+   Visualization layer lives in js/viz.js and renders on the "six:data" event. */
 
 (function () {
   "use strict";
 
   const DAY_NAMES = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
   const WEEKDAYS = ["Mon", "Tue", "Wed", "Thu"];
+  const MUSIC_LABELS = {
+    hiphop: "Hip-Hop", rnb: "R&B", reggae: "Reggae", dancehall: "Dancehall",
+    afro: "Afrobeats", latin: "Latin", house: "House", funk: "Funk", top40: "Top 40",
+  };
+  const VIBE_LABELS = { club: "Full club", barclub: "Bar → dancefloor", lounge: "Lounge" };
+
+  // Newest data lives on GitHub (updated nightly by CI); the deployed copy is the fallback.
+  const RAW_DATA_URL =
+    "https://raw.githubusercontent.com/anoojanv/toronto-life/claude/toronto-lifestyle-app-9zc9gy/data/events.json";
+  const LOCAL_DATA_URL = "data/events.json";
 
   const state = {
-    tab: "sports",
+    tab: "pulse",
     day: "weekdays",
     team: "all",
     maxPrice: "all",
@@ -16,6 +27,7 @@
     hood: "all",
     vibe: "all",
     saved: loadSaved(),
+    data: null,
   };
 
   /* ---------- helpers ---------- */
@@ -23,9 +35,7 @@
   function loadSaved() {
     try {
       return new Set(JSON.parse(localStorage.getItem("sixnights-saved") || "[]"));
-    } catch (e) {
-      return new Set();
-    }
+    } catch (e) { return new Set(); }
   }
 
   function persistSaved() {
@@ -34,22 +44,28 @@
     } catch (e) { /* private mode — saving is a nice-to-have */ }
   }
 
+  function todayISO() {
+    return new Date().toLocaleDateString("en-CA", { timeZone: "America/Toronto" });
+  }
+
+  function todayDayName() {
+    // en-US: "Wed" without the period en-CA appends
+    return new Date().toLocaleDateString("en-US", { timeZone: "America/Toronto", weekday: "short" }).slice(0, 3);
+  }
+
   function dayOf(dateStr) {
-    // Parse as local date, not UTC midnight
     const [y, m, d] = dateStr.split("-").map(Number);
     return DAY_NAMES[new Date(y, m - 1, d).getDay()];
   }
 
   function fmtDate(dateStr) {
     const [y, m, d] = dateStr.split("-").map(Number);
-    const dt = new Date(y, m - 1, d);
-    return dt.toLocaleDateString("en-CA", { weekday: "short", month: "short", day: "numeric" });
+    return new Date(y, m - 1, d).toLocaleDateString("en-CA", { weekday: "short", month: "short", day: "numeric" });
   }
 
   function matchesDay(dateStrOrNights) {
     if (state.day === "all") return true;
     if (Array.isArray(dateStrOrNights)) {
-      // venue nights list
       if (state.day === "weekdays") return dateStrOrNights.some((n) => WEEKDAYS.includes(n));
       return dateStrOrNights.includes(state.day);
     }
@@ -81,17 +97,20 @@
       .join("")}</div>`;
   }
 
+  function mapsUrl(q) {
+    return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(q + " Toronto")}`;
+  }
+
   /* ---------- card renderers ---------- */
 
-  function eventCard(ev, kind) {
+  function eventCard(ev) {
     const day = dayOf(ev.date);
     const isWeekday = WEEKDAYS.includes(day);
     const genreTags = (ev.genres || [])
-      .map((g) => `<span class="tag genre-${g}">${esc(MUSIC_LABELS[g] || g)}</span>`)
-      .join("");
+      .map((g) => `<span class="tag genre-${g}">${esc(MUSIC_LABELS[g] || g)}</span>`).join("");
     const extraTags = (ev.tags || []).map((t) => `<span class="tag deal">${esc(t)}</span>`).join("");
     return `
-      <article class="card" data-kind="${kind}">
+      <article class="card clickable" data-open="${esc(ev.id)}" tabindex="0" role="button" aria-label="Open details for ${esc(ev.title)}">
         <div class="card-top">
           <span class="card-date">${esc(fmtDate(ev.date))}${isWeekday ? '<span class="weekday-flag">● weeknight</span>' : ""}</span>
           ${saveBtn(ev.id)}
@@ -109,14 +128,11 @@
 
   function venueCard(v) {
     const musicTags = v.music
-      .map((g) => `<span class="tag genre-${g === "dancehall" ? "reggae" : g}">${esc(MUSIC_LABELS[g] || g)}</span>`)
-      .join("");
-    const nightDots = DAY_NAMES.slice(1).concat(DAY_NAMES[0]) // Mon..Sun
-      .map((d) => `<span class="night-dot ${v.nights.includes(d) ? "on" : ""}">${d}</span>`)
-      .join("");
-    const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(v.name + " " + v.address + " Toronto")}`;
+      .map((g) => `<span class="tag genre-${g === "dancehall" ? "reggae" : g}">${esc(MUSIC_LABELS[g] || g)}</span>`).join("");
+    const nightDots = DAY_NAMES.slice(1).concat(DAY_NAMES[0])
+      .map((d) => `<span class="night-dot ${v.nights.includes(d) ? "on" : ""}">${d}</span>`).join("");
     return `
-      <article class="card" data-kind="venue">
+      <article class="card clickable" data-open="${esc(v.id)}" tabindex="0" role="button" aria-label="Open details for ${esc(v.name)}">
         <div class="card-top">
           <span class="card-date">${esc(v.hoodLabel)}</span>
           ${saveBtn(v.id)}
@@ -128,7 +144,7 @@
         <div class="nights-row">${nightDots}</div>
         <div class="card-bottom">
           <span class="price cheap"><span class="from">Cover</span>${esc(v.cover.split(",")[0])}</span>
-          <div class="ticket-links"><a class="tix-btn primary" href="${mapsUrl}" target="_blank" rel="noopener">Map</a></div>
+          <div class="ticket-links"><a class="tix-btn primary" href="${mapsUrl(v.name + " " + v.address)}" target="_blank" rel="noopener">Map</a></div>
         </div>
       </article>`;
   }
@@ -142,62 +158,166 @@
       </a>`;
   }
 
+  /* ---------- modal ---------- */
+
+  const backdrop = document.getElementById("modalBackdrop");
+  const modalBody = document.getElementById("modalBody");
+
+  function findItem(id) {
+    const d = state.data;
+    if (!d) return null;
+    return (
+      d.sports.find((e) => e.id === id) ||
+      d.concerts.find((e) => e.id === id) ||
+      d.nightlife.find((v) => v.id === id) ||
+      null
+    );
+  }
+
+  function priceContextBars(item) {
+    // this event's est. price vs the weekday and weekend averages across all events
+    const all = state.data.sports.concat(state.data.concerts);
+    const wk = all.filter((e) => WEEKDAYS.includes(dayOf(e.date)));
+    const we = all.filter((e) => !WEEKDAYS.includes(dayOf(e.date)));
+    const avg = (list) => (list.length ? Math.round(list.reduce((s, e) => s + e.price, 0) / list.length) : 0);
+    const rows = [
+      { label: "This event", value: item.price, self: true },
+      { label: "Weeknight avg", value: avg(wk) },
+      { label: "Weekend avg", value: avg(we) },
+    ].filter((r) => r.value > 0);
+    const max = Math.max(...rows.map((r) => r.value));
+    return `
+      <div class="ctx-chart" aria-label="Price context">
+        ${rows.map((r) => `
+          <div class="ctx-row">
+            <span class="ctx-label">${esc(r.label)}</span>
+            <span class="ctx-track"><span class="ctx-fill ${r.self ? "self" : ""}" style="width:${Math.max(6, Math.round((r.value / max) * 100))}%"></span></span>
+            <span class="ctx-value">$${r.value}</span>
+          </div>`).join("")}
+      </div>`;
+  }
+
+  function openModal(id) {
+    const item = findItem(id);
+    if (!item) return;
+    const isVenue = !item.date;
+    let html;
+    if (isVenue) {
+      const nightDots = DAY_NAMES.slice(1).concat(DAY_NAMES[0])
+        .map((d) => `<span class="night-dot ${item.nights.includes(d) ? "on" : ""}">${d}</span>`).join("");
+      html = `
+        <p class="modal-kicker">${esc(item.hoodLabel)} · ${esc(VIBE_LABELS[item.vibe] || item.vibe)}</p>
+        <h2 class="modal-title">${esc(item.name)}</h2>
+        <p class="modal-sub">${esc(item.address)}</p>
+        <p class="modal-desc">${esc(item.desc)}</p>
+        <div class="tag-row">${item.music.map((g) => `<span class="tag genre-${g === "dancehall" ? "reggae" : g}">${esc(MUSIC_LABELS[g] || g)}</span>`).join("")}</div>
+        <h4 class="modal-h4">Nights it goes</h4>
+        <div class="nights-row">${nightDots}</div>
+        <h4 class="modal-h4">Cover</h4>
+        <p class="modal-desc">${esc(item.cover)}</p>
+        <div class="modal-actions">
+          <a class="tix-btn primary" href="${mapsUrl(item.name + " " + item.address)}" target="_blank" rel="noopener">Open in Maps</a>
+          <a class="tix-btn" href="https://www.google.com/search?q=${encodeURIComponent(item.name + " Toronto instagram")}" target="_blank" rel="noopener">Find on Instagram</a>
+          <button class="tix-btn save-toggle" data-save="${esc(item.id)}">${state.saved.has(item.id) ? "★ Saved" : "☆ Save to lineup"}</button>
+        </div>`;
+    } else {
+      const day = dayOf(item.date);
+      html = `
+        <p class="modal-kicker">${esc(fmtDate(item.date))}${WEEKDAYS.includes(day) ? " · weeknight ✓" : ""}</p>
+        <h2 class="modal-title">${esc(item.title)}</h2>
+        <p class="modal-sub">${esc(item.venue)}${item.hood ? " · " + esc(item.hood) : ""}</p>
+        <p class="modal-desc">${esc(item.desc)}</p>
+        <div class="tag-row">
+          ${(item.genres || []).map((g) => `<span class="tag genre-${g}">${esc(MUSIC_LABELS[g] || g)}</span>`).join("")}
+          ${(item.tags || []).map((t) => `<span class="tag deal">${esc(t)}</span>`).join("")}
+        </div>
+        <h4 class="modal-h4">Price check <span class="modal-fine">(estimates)</span></h4>
+        ${priceContextBars(item)}
+        <div class="modal-actions">
+          ${item.links.map((l) => `<a class="tix-btn ${l.primary ? "primary" : ""}" href="${esc(l.url)}" target="_blank" rel="noopener">${esc(l.label)}</a>`).join("")}
+          <button class="tix-btn save-toggle" data-save="${esc(item.id)}">${state.saved.has(item.id) ? "★ Saved" : "☆ Save to lineup"}</button>
+        </div>`;
+    }
+    modalBody.innerHTML = html;
+    backdrop.classList.remove("hidden");
+    document.body.style.overflow = "hidden";
+  }
+
+  function closeModal() {
+    backdrop.classList.add("hidden");
+    document.body.style.overflow = "";
+  }
+
+  document.getElementById("modalClose").addEventListener("click", closeModal);
+  backdrop.addEventListener("click", (e) => { if (e.target === backdrop) closeModal(); });
+  document.addEventListener("keydown", (e) => { if (e.key === "Escape") closeModal(); });
+
   /* ---------- renders ---------- */
 
   function renderSports() {
-    const grid = document.getElementById("sportsGrid");
-    const items = SPORTS_EVENTS.filter((ev) => {
+    const items = state.data.sports.filter((ev) => {
       if (!matchesDay(ev.date)) return false;
       if (state.team !== "all" && ev.team !== state.team) return false;
       if (state.maxPrice !== "all" && ev.price > Number(state.maxPrice)) return false;
       return true;
     }).sort((a, b) => a.date.localeCompare(b.date));
-    grid.innerHTML = items.map((ev) => eventCard(ev, "sports")).join("");
+    document.getElementById("sportsGrid").innerHTML = items.map(eventCard).join("");
     document.getElementById("sportsEmpty").classList.toggle("hidden", items.length > 0);
   }
 
   function renderConcerts() {
-    const grid = document.getElementById("concertsGrid");
-    const items = CONCERT_EVENTS.filter((ev) => {
+    const items = state.data.concerts.filter((ev) => {
       if (!matchesDay(ev.date)) return false;
       if (state.genre !== "all" && !ev.genres.includes(state.genre)) return false;
       if (state.size !== "all" && ev.size !== state.size) return false;
       return true;
     }).sort((a, b) => a.date.localeCompare(b.date));
-    grid.innerHTML = items.map((ev) => eventCard(ev, "concerts")).join("");
+    document.getElementById("concertsGrid").innerHTML = items.map(eventCard).join("");
     document.getElementById("concertsEmpty").classList.toggle("hidden", items.length > 0);
-    document.getElementById("watchGrid").innerHTML = ARTIST_WATCH.map(watchCard).join("");
+    document.getElementById("watchGrid").innerHTML = state.data.artistWatch.map(watchCard).join("");
   }
 
   function renderNightlife() {
-    const grid = document.getElementById("nightlifeGrid");
-    const items = NIGHTLIFE_VENUES.filter((v) => {
+    const items = state.data.nightlife.filter((v) => {
       if (!matchesDay(v.nights)) return false;
       if (state.hood !== "all" && v.hood !== state.hood) return false;
       if (state.vibe !== "all" && v.vibe !== state.vibe) return false;
       return true;
     });
-    grid.innerHTML = items.map(venueCard).join("");
+    document.getElementById("nightlifeGrid").innerHTML = items.map(venueCard).join("");
     document.getElementById("nightlifeEmpty").classList.toggle("hidden", items.length > 0);
   }
 
   function renderLineup() {
-    const grid = document.getElementById("lineupGrid");
-    const savedEvents = [...SPORTS_EVENTS, ...CONCERT_EVENTS]
+    const savedEvents = state.data.sports.concat(state.data.concerts)
       .filter((ev) => state.saved.has(ev.id))
       .sort((a, b) => a.date.localeCompare(b.date))
-      .map((ev) => eventCard(ev, "lineup"));
-    const savedVenues = NIGHTLIFE_VENUES.filter((v) => state.saved.has(v.id)).map(venueCard);
+      .map(eventCard);
+    const savedVenues = state.data.nightlife.filter((v) => state.saved.has(v.id)).map(venueCard);
     const all = savedEvents.concat(savedVenues);
-    grid.innerHTML = all.join("");
+    document.getElementById("lineupGrid").innerHTML = all.join("");
     document.getElementById("lineupEmpty").classList.toggle("hidden", all.length > 0);
   }
 
+  function renderUpdatedBadge() {
+    const el = document.getElementById("updatedBadge");
+    try {
+      const dt = new Date(state.data.lastUpdated);
+      const days = Math.floor((Date.now() - dt.getTime()) / 86400000);
+      const when = days <= 0 ? "today" : days === 1 ? "yesterday" : `${days} days ago`;
+      el.textContent = `⟳ Data refreshed ${when} · updates nightly`;
+    } catch (e) {
+      el.textContent = "⟳ Updates nightly";
+    }
+  }
+
   function renderAll() {
+    if (!state.data) return;
     renderSports();
     renderConcerts();
     renderNightlife();
     renderLineup();
+    renderUpdatedBadge();
     document.getElementById("savedCount").textContent = state.saved.size;
   }
 
@@ -218,7 +338,6 @@
     });
   }
 
-  // Tabs
   const nav = document.getElementById("topnav");
   nav.addEventListener("click", (e) => {
     const btn = e.target.closest(".navlink");
@@ -236,7 +355,6 @@
     window.scrollTo({ top: 0, behavior: "smooth" });
   });
 
-  // Day strip
   const dayStrip = document.getElementById("dayStrip");
   dayStrip.addEventListener("click", (e) => {
     const btn = e.target.closest(".day-chip");
@@ -246,7 +364,6 @@
     renderAll();
   });
 
-  // Filters
   wireChipGroup("sportsTeamFilter", "team", "team");
   wireChipGroup("sportsPriceFilter", "maxPrice", "price");
   wireChipGroup("concertGenreFilter", "genre", "genre");
@@ -254,16 +371,69 @@
   wireChipGroup("hoodFilter", "hood", "hood");
   wireChipGroup("vibeFilter", "vibe", "vibe");
 
-  // Save buttons (delegated globally)
+  // Global delegation: saves, and card/pin clicks that open the modal
   document.addEventListener("click", (e) => {
-    const btn = e.target.closest("[data-save]");
-    if (!btn) return;
-    const id = btn.dataset.save;
-    if (state.saved.has(id)) state.saved.delete(id);
-    else state.saved.add(id);
-    persistSaved();
-    renderAll();
+    const saveEl = e.target.closest("[data-save]");
+    if (saveEl) {
+      e.stopPropagation();
+      const id = saveEl.dataset.save;
+      if (state.saved.has(id)) state.saved.delete(id);
+      else state.saved.add(id);
+      persistSaved();
+      renderAll();
+      if (saveEl.classList.contains("save-toggle")) {
+        saveEl.textContent = state.saved.has(id) ? "★ Saved" : "☆ Save to lineup";
+      }
+      return;
+    }
+    if (e.target.closest("a")) return; // links behave as links
+    const opener = e.target.closest("[data-open]");
+    if (opener) openModal(opener.dataset.open);
   });
 
-  renderAll();
+  document.addEventListener("keydown", (e) => {
+    if (e.key !== "Enter") return;
+    const opener = e.target.closest && e.target.closest("[data-open]");
+    if (opener) openModal(opener.dataset.open);
+  });
+
+  /* ---------- data loading ---------- */
+
+  function pruneAndAdopt(data) {
+    const today = todayISO();
+    data.sports = (data.sports || []).filter((e) => e.date >= today);
+    data.concerts = (data.concerts || []).filter((e) => e.date >= today);
+    state.data = data;
+    renderAll();
+    document.dispatchEvent(new CustomEvent("six:data"));
+  }
+
+  async function loadData() {
+    const bust = `?t=${todayISO()}`;
+    for (const url of [RAW_DATA_URL + bust, LOCAL_DATA_URL + bust]) {
+      try {
+        const res = await fetch(url, { cache: "no-store" });
+        if (!res.ok) throw new Error(res.status);
+        pruneAndAdopt(await res.json());
+        return;
+      } catch (e) { /* try next source */ }
+    }
+    document.getElementById("updatedBadge").textContent = "⚠ Couldn't load event data — refresh to retry.";
+  }
+
+  // Shared surface for viz.js
+  window.SIX = {
+    state,
+    esc,
+    dayOf,
+    fmtDate,
+    todayISO,
+    todayDayName,
+    openModal,
+    WEEKDAYS,
+    MUSIC_LABELS,
+    VIBE_LABELS,
+  };
+
+  loadData();
 })();

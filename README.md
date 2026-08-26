@@ -10,16 +10,42 @@ A lifestyle app for people who like **sports, concerts, and going out in Toronto
 - **📌 My Lineup** — star any game, show, or venue to build your week (persisted in `localStorage`).
 - **Mon–Thu first** — the default day filter is "Mon–Thu only," because that's the whole point.
 
+- **📊 The Pulse** — the default view: stat tiles, a clickable 14-night price timeline (dot height = est. get-in price), a "cheapest night to go out" chart, a live "Tonight" list, and a clickable schematic map of downtown venues. Every dot, bar row, and pin opens a detail modal.
+
 ## Stack
 
-Zero-dependency static site: vanilla HTML + CSS + JS, no build step. Deploys to Netlify in seconds (`netlify.toml` included).
+Zero-dependency static site: vanilla HTML + CSS + JS, no build step. Deploys to Netlify in seconds (`netlify.toml` included). Chart colors are validated for dark-surface contrast and colour-vision-deficiency separation (amber/purple/teal, all-pairs ΔE ≥ 10).
 
 ```
-index.html      — page structure & tabs
-css/styles.css  — dark theme, card grid, filters
-js/data.js      — curated events + venues (the data layer)
-js/app.js       — tabs, filters, rendering, saved lineup
+index.html               — page structure, tabs, modal
+css/styles.css           — dark theme, cards, dashboard, modal
+data/events.json         — the data layer (refreshed nightly)
+js/app.js                — data loading, tabs, filters, grids, modal
+js/viz.js                — Pulse dashboard: timeline, bars, map, tooltips
+scripts/update-data.mjs  — nightly refresh script (prune + optional Ticketmaster pull)
+.github/workflows/nightly-update.yml — the 4:15am ET cron
 ```
+
+## Nightly updates — how it works
+
+Every night at **4:15am Toronto time**, a GitHub Action:
+
+1. Runs `scripts/update-data.mjs`, which always prunes events whose date has passed, and — when a `TICKETMASTER_API_KEY` repo secret is configured — replaces the seed lists with live Toronto listings from the [Ticketmaster Discovery API](https://developer.ticketmaster.com/products-and-docs/apis/discovery-api/v2/) (sports + hip-hop/R&B/reggae).
+2. Commits the refreshed `data/events.json`.
+3. Redeploys to Netlify when a `NETLIFY_AUTH_TOKEN` repo secret is configured.
+
+Three layers of freshness, so the site is current even with **zero secrets configured**:
+
+- The page fetches `data/events.json` from raw.githubusercontent.com first (the nightly commit), falling back to the deployed copy.
+- Past events are also filtered out client-side at render time.
+- The hero badge shows when data was last refreshed.
+
+**To turn on the full loop**, add repo secrets under GitHub → Settings → Secrets and variables → Actions:
+
+| Secret | Purpose | Where to get it |
+|---|---|---|
+| `TICKETMASTER_API_KEY` | live event listings | free at [developer.ticketmaster.com](https://developer.ticketmaster.com) |
+| `NETLIFY_AUTH_TOKEN` | nightly redeploys | Netlify → User settings → Applications → New access token |
 
 ## Data honesty
 

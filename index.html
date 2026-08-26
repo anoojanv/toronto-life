@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>6IXNIGHTS — Toronto Weekday Plans</title>
-  <meta name="description" content="Cheap weekday tickets to Jays &amp; Raptors games, hip-hop / R&B / reggae concerts, and the best clubs and bars in downtown Toronto." />
+  <meta name="description" content="Cheap weekday tickets to Jays &amp; Raptors games, hip-hop / R&B / reggae concerts, and the best clubs and bars in downtown Toronto — refreshed nightly." />
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌃</text></svg>" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -15,11 +15,15 @@
 
   <header class="topbar">
     <div class="wrap topbar-inner">
-      <a class="logo" href="#" id="logo">
-        <span class="logo-six">6IX</span><span class="logo-nights">NIGHTS</span>
-      </a>
+      <div class="logo-group">
+        <a class="logo" href="#" id="logo">
+          <span class="logo-six">6IX</span><span class="logo-nights">NIGHTS</span>
+        </a>
+        <span class="made-by">Made by AV</span>
+      </div>
       <nav class="topnav" id="topnav">
-        <button class="navlink active" data-tab="sports">Sports</button>
+        <button class="navlink active" data-tab="pulse">Pulse</button>
+        <button class="navlink" data-tab="sports">Sports</button>
         <button class="navlink" data-tab="concerts">Concerts</button>
         <button class="navlink" data-tab="nightlife">Nightlife</button>
         <button class="navlink navlink-saved" data-tab="lineup">My Lineup <span class="saved-count" id="savedCount">0</span></button>
@@ -35,6 +39,7 @@
         Cheap seats at the Jays and Raptors. Hip-hop, R&amp;B and reggae shows.
         The right rooms on King West, Ossington and Yorkville — Monday to Thursday, when covers drop and the get-in price is a joke.
       </p>
+      <p class="updated-badge" id="updatedBadge">Refreshed nightly</p>
 
       <div class="day-strip" id="dayStrip" role="group" aria-label="Filter by day of week">
         <button class="day-chip" data-day="all">All days</button>
@@ -52,8 +57,49 @@
 
   <main class="wrap main" id="main">
 
+    <!-- ===== PULSE (dashboard) ===== -->
+    <section class="tab-panel active" id="panel-pulse">
+      <div class="panel-head">
+        <h2>📊 The Pulse</h2>
+        <p>Your next two weeks in one view. Click anything — dots, bars, pins — to open it.</p>
+      </div>
+
+      <div class="stat-row" id="statRow"></div>
+
+      <div class="viz-card">
+        <div class="viz-head">
+          <h3>Next 14 nights</h3>
+          <div class="viz-legend" id="timelineLegend"></div>
+        </div>
+        <div class="viz-scroll"><div id="timelineViz"></div></div>
+        <p class="viz-note">Dot height = est. get-in price (lower is cheaper). Shaded columns are Mon–Thu. Click a dot for details.</p>
+      </div>
+
+      <div class="viz-two">
+        <div class="viz-card">
+          <div class="viz-head"><h3>Cheapest night to go out</h3></div>
+          <div id="priceByDayViz"></div>
+          <p class="viz-note">Average estimated get-in price across all upcoming games &amp; shows, by day of week.</p>
+        </div>
+
+        <div class="viz-card">
+          <div class="viz-head"><h3>Tonight</h3></div>
+          <div id="tonightList"></div>
+        </div>
+      </div>
+
+      <div class="viz-card">
+        <div class="viz-head">
+          <h3>The map — where the music lives</h3>
+          <div class="viz-legend" id="mapLegend"></div>
+        </div>
+        <div id="mapViz"></div>
+        <p class="viz-note">Schematic downtown map — positions are approximate. Click a pin to open the venue.</p>
+      </div>
+    </section>
+
     <!-- ===== SPORTS ===== -->
-    <section class="tab-panel active" id="panel-sports">
+    <section class="tab-panel" id="panel-sports">
       <div class="panel-head">
         <h2>🏟 Cheap seats, big nights</h2>
         <p>Weekday games are the arbitrage: same teams, same building, a fraction of the weekend price. Prices shown are typical get-in estimates — tap a ticket link for live prices.</p>
@@ -180,12 +226,22 @@
 
   <footer class="footer">
     <div class="wrap">
-      <p><span class="logo-six">6IX</span><span class="logo-nights">NIGHTS</span> — built for Toronto weeknights.</p>
+      <p><span class="logo-six">6IX</span><span class="logo-nights">NIGHTS</span> — built for Toronto weeknights. Made by AV.</p>
       <p class="footer-fine">Event details and prices are curated estimates and change constantly — always confirm on the ticket or venue link. Not affiliated with any venue, team, or artist. 19+ for nightlife listings. Drink water between sets.</p>
     </div>
   </footer>
 
-  <script src="js/data.js"></script>
+  <!-- detail modal -->
+  <div class="modal-backdrop hidden" id="modalBackdrop">
+    <div class="modal" role="dialog" aria-modal="true" id="modal">
+      <button class="modal-close" id="modalClose" aria-label="Close">✕</button>
+      <div id="modalBody"></div>
+    </div>
+  </div>
+
+  <div class="viz-tooltip hidden" id="vizTooltip"></div>
+
   <script src="js/app.js"></script>
+  <script src="js/viz.js"></script>
 </body>
 </html>

@@ -1,0 +1,46 @@
+name: Nightly data refresh
+
+on:
+  schedule:
+    - cron: "15 8 * * *" # 4:15am Toronto (EDT) every night
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Refresh event data
+        env:
+          TICKETMASTER_API_KEY: ${{ secrets.TICKETMASTER_API_KEY }}
+        run: node scripts/update-data.mjs
+
+      - name: Commit updated data
+        id: commit
+        run: |
+          git config user.name "6ixnights-bot"
+          git config user.email "actions@github.com"
+          if git diff --quiet data/events.json; then
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+            echo "No data changes tonight."
+          else
+            git add data/events.json
+            git commit -m "Nightly data refresh $(date -u +%F)"
+            git push
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Deploy to Netlify
+        if: steps.commit.outputs.changed == 'true' && env.NETLIFY_AUTH_TOKEN != ''
+        env:
+          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+          NETLIFY_SITE_ID: 2d3d8682-110c-4098-a37c-ea39c1052f61
+        run: npx --yes netlify-cli deploy --prod --dir . --site "$NETLIFY_SITE_ID"
