@@ -320,119 +320,177 @@
       : `<p class="empty-note">Quiet one tonight (${esc(dayName)}) — check the timeline for what's next.</p>`;
   }
 
-  /* ---------- venue map ---------- */
+  /* ---------- CITY.MAP: district constellation ----------
+     Real lat/lng puts six King West rooms inside one city block, which no
+     amount of nudging makes readable. So districts keep their relative
+     geography (Yorkville north, Ossington west, King West south-central…)
+     while each district's venues sit on an evenly-spaced ring around its hub —
+     spacing is structural, not luck. Street corridors link the hubs. */
 
   function renderMap(S) {
     if (!document.getElementById("mapViz")) return;
-    const { state, esc, VIBE_LABELS, MUSIC_LABELS } = S;
+    const { state, esc, VIBE_LABELS, MUSIC_LABELS, todayDayName } = S;
     const el = document.getElementById("mapViz");
-    const venues = state.data.nightlife.filter((v) => v.lat && v.lng);
+    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-    const latMin = 43.636, latMax = 43.684, lngMin = -79.435, lngMax = -79.381;
-    const W = 900, H = 560, PAD = 34;
-    const px = (lng) => PAD + ((lng - lngMin) / (lngMax - lngMin)) * (W - PAD * 2);
-    // Piecewise y: the downtown band (43.636–43.656) holds nearly all venues, so it
-    // gets ~62% of the height; the sparse stretch up to Yorkville is compressed.
-    const SPLIT = 43.656, splitY = PAD + 0.36 * (H - PAD * 2);
-    const py = (lat) =>
-      lat >= SPLIT
-        ? PAD + ((latMax - lat) / (latMax - SPLIT)) * (splitY - PAD)
-        : splitY + ((SPLIT - lat) / (SPLIT - latMin)) * (H - PAD - 46 - splitY);
+    const W = 1000, H = 660;
+    const pos = (deg, r, cx, cy) => {
+      const a = (deg * Math.PI) / 180;
+      return [cx + r * Math.sin(a), cy - r * Math.cos(a)];
+    };
 
-    const zones = [
-      { label: "YORKVILLE", lat: 43.675, lng: -79.3915 },
-      { label: "OSSINGTON / DUNDAS W", lat: 43.6545, lng: -79.4245 },
-      { label: "QUEEN WEST", lat: 43.6472, lng: -79.4135 },
-      { label: "KING WEST", lat: 43.639, lng: -79.4115 },
-      { label: "ENT. DISTRICT", lat: 43.6472, lng: -79.3875 },
+    // Hub placement mirrors the city: Yorkville north, Ossington/Dundas west,
+    // Queen West between, King West south-central, Ent. District east of it.
+    const DISTRICTS = [
+      { key: "yorkville", label: "YORKVILLE", x: 792, y: 118, start: 30 },
+      { key: "ossington", label: "OSSINGTON / DUNDAS W", x: 214, y: 268, start: 200 },
+      { key: "queenwest", label: "QUEEN WEST", x: 452, y: 176, start: 150 },
+      { key: "kingwest", label: "KING WEST", x: 468, y: 452, start: 96 },
+      { key: "ent", label: "ENT. DISTRICT", x: 838, y: 398, start: 165 },
+    ];
+    const hubOf = {};
+    DISTRICTS.forEach((d) => { hubOf[d.key] = d; });
+
+    const today = todayDayName();
+
+    // Street corridors between hubs — the city grid, abstracted
+    const CORRIDORS = [
+      { a: "ossington", b: "queenwest", label: "" }, // district name already reads "Dundas W"
+      { a: "queenwest", b: "kingwest", label: "" },
+      { a: "kingwest", b: "ent", label: "KING ST W" },
+      { a: "queenwest", b: "yorkville", label: "AVENUE RD" },
+      { a: "yorkville", b: "ent", label: "" },
     ];
 
-    const street = (d, label, lx, ly, anchor = "start", dash = "") => `
-      <path d="${d}" stroke="${C.street}" stroke-width="2" fill="none" ${dash ? `stroke-dasharray="${dash}"` : ""} stroke-linecap="round" />
-      <text x="${lx}" y="${ly}" text-anchor="${anchor}" fill="${C.inkLabel}" font-size="11" letter-spacing="1.5" font-family="JetBrains Mono, monospace">${label}</text>`;
-
-    const streets =
-      street(`M ${PAD} ${py(43.6448)} H ${W - PAD}`, "KING ST W", W - PAD - 4, py(43.6448) - 7, "end") +
-      street(`M ${PAD} ${py(43.6489)} H ${W - PAD}`, "QUEEN ST W", W - PAD - 4, py(43.6489) - 7, "end") +
-      street(`M ${PAD} ${py(43.6522)} H ${px(-79.4)}`, "DUNDAS ST W", PAD + 4, py(43.6522) - 7) +
-      street(`M ${px(-79.4207)} ${PAD} V ${H - PAD}`, "OSSINGTON", px(-79.4207) + 7, PAD + 14) +
-      street(`M ${px(-79.3985)} ${PAD} V ${py(43.663)}`, "AVENUE RD", px(-79.3985) + 7, PAD + 14, "start", "5 5");
-
-    const lake = `
-      <linearGradient id="lakeGrad" x1="0" y1="0" x2="0" y2="1">
-        <stop offset="0%" stop-color="rgba(63,214,200,0)" />
-        <stop offset="100%" stop-color="rgba(63,214,200,0.16)" />
-      </linearGradient>
-      <rect x="0" y="${H - 46}" width="${W}" height="46" fill="url(#lakeGrad)" />
-      <text x="${W / 2}" y="${H - 14}" text-anchor="middle" fill="${C.loungeGlow}" opacity="0.8" font-size="11" letter-spacing="5" font-family="JetBrains Mono, monospace">≈ ≈ LAKE ONTARIO ≈ ≈</text>`;
-
-    const zoneLabels = zones.map((z) => `
-      <text x="${px(z.lng)}" y="${py(z.lat)}" text-anchor="middle" fill="${C.sportsGlow}" opacity="0.9" font-size="12.5" letter-spacing="3.5" font-weight="800" font-family="Archivo, sans-serif" filter="url(#textGlowMap)">${z.label}</text>`).join("");
-
-    // Spread pins that project onto (nearly) the same pixel — King West venues
-    // are metres apart in real life, so nudge until hit targets don't overlap.
-    const pts = venues.map((v) => ({ v, x: px(v.lng), y: py(v.lat) }));
-    const MIN_D = 56;
-    for (let iter = 0; iter < 40; iter++) {
-      let moved = false;
-      for (let a = 0; a < pts.length; a++) {
-        for (let b = a + 1; b < pts.length; b++) {
-          let dx = pts[b].x - pts[a].x, dy = pts[b].y - pts[a].y;
-          let d = Math.hypot(dx, dy);
-          if (d >= MIN_D) continue;
-          if (d < 0.01) { dx = 1; dy = 0; d = 1; }
-          const push = (MIN_D - d) / 2 / d;
-          pts[a].x -= dx * push; pts[a].y -= dy * push;
-          pts[b].x += dx * push; pts[b].y += dy * push;
-          moved = true;
-        }
-      }
-      if (!moved) break;
-    }
-    pts.forEach((p) => {
-      p.x = Math.min(W - PAD, Math.max(PAD, p.x));
-      p.y = Math.min(H - 58, Math.max(PAD + 8, p.y)); // stay above the lake band
-    });
-
-    // Alternate label side by x-order so horizontal neighbours never stack labels
-    pts.slice().sort((a, b) => a.x - b.x).forEach((p, i) => { p.labelAbove = i % 2 === 0; });
-
-    const pins = pts.map(({ v, x, y: yv, labelAbove }) => {
-      const tip = `<strong>${esc(v.name)}</strong><br>${esc(v.hoodLabel)} · ${esc(VIBE_LABELS[v.vibe] || v.vibe)}<br>${esc(v.music.map((m) => MUSIC_LABELS[m] || m).join(" · "))}<br>${esc(v.cover)} · click to open`;
-      const ly = labelAbove ? yv - 15 : yv + 24;
-      return `
-        <circle cx="${x}" cy="${yv}" r="8" fill="${C[v.vibe]}" stroke="${C.surface}" stroke-width="2.5" filter="url(#pinGlow)" pointer-events="none" />
-        <text x="${x}" y="${ly}" text-anchor="middle" fill="${C.inkStrong}" font-size="11" font-weight="700" font-family="Archivo, sans-serif" paint-order="stroke" stroke="${C.surface}" stroke-width="3.5" pointer-events="none">${esc(v.name)}</text>
-        <circle cx="${x}" cy="${yv}" r="14" fill="transparent" style="cursor:pointer" data-open="${esc(v.id)}" data-tip="${esc(tip)}" />`;
+    const corridorMarkup = CORRIDORS.map((c, i) => {
+      const A = hubOf[c.a], B = hubOf[c.b];
+      if (!A || !B) return "";
+      const mx = (A.x + B.x) / 2, my = (A.y + B.y) / 2;
+      const ang = (Math.atan2(B.y - A.y, B.x - A.x) * 180) / Math.PI;
+      const flip = ang > 90 || ang < -90;
+      const spark = reduceMotion ? "" : `
+        <circle r="2.8" fill="${C.loungeGlow}" opacity="0.9" filter="url(#pinGlow)">
+          <animateMotion dur="${7 + i * 2}s" repeatCount="indefinite"
+            path="M ${A.x} ${A.y} L ${B.x} ${B.y}" />
+        </circle>`;
+      const label = c.label ? `
+        <text x="${mx}" y="${my - 7}" text-anchor="middle" fill="${C.inkLabel}" font-size="10.5"
+              letter-spacing="1.5" font-family="JetBrains Mono, monospace" opacity="0.75"
+              transform="rotate(${flip ? ang + 180 : ang} ${mx} ${my})"
+              paint-order="stroke" stroke="${C.surface}" stroke-width="3">${esc(c.label)}</text>` : "";
+      return `<line x1="${A.x}" y1="${A.y}" x2="${B.x}" y2="${B.y}" stroke="${C.street}"
+                 stroke-width="1.6" stroke-dasharray="3 7" opacity="0.8" />${spark}${label}`;
     }).join("");
 
+    // Venues onto evenly-spaced ring slots around their district hub
+    const nodes = [];
+    DISTRICTS.forEach((d) => {
+      const list = state.data.nightlife.filter((v) => v.hood === d.key);
+      d.count = list.length;
+      const ringR = list.length <= 1 ? 66 : 62 + list.length * 8;
+      d.ringR = ringR;
+      list.forEach((v, i) => {
+        const angle = d.start + (i * 360) / list.length;
+        const [x, y] = pos(angle, ringR, d.x, d.y);
+        nodes.push({ v, x, y, angle, hub: d, open: v.nights.includes(today) });
+      });
+    });
+
+    const ringMarkup = DISTRICTS.filter((d) => d.count > 1).map((d) => `
+      <circle cx="${d.x}" cy="${d.y}" r="${d.ringR}" fill="none" stroke="${C.ring}"
+              stroke-width="1" stroke-dasharray="1 7" stroke-linecap="round" />`).join("");
+
+    const spokes = nodes.map((n) => `
+      <line x1="${n.hub.x}" y1="${n.hub.y}" x2="${n.x}" y2="${n.y}"
+            stroke="${C[n.v.vibe]}" stroke-width="1" opacity="0.3" />`).join("");
+
+    const hubMarkup = DISTRICTS.map((d, i) => {
+      const spin = reduceMotion ? "" : `
+        <circle cx="${d.x}" cy="${d.y}" r="33" fill="none" stroke="${C.ringBright}" stroke-width="1.1"
+                stroke-dasharray="8 13" stroke-linecap="round">
+          <animateTransform attributeName="transform" type="rotate"
+            from="0 ${d.x} ${d.y}" to="${i % 2 ? "-360" : "360"} ${d.x} ${d.y}"
+            dur="${26 + i * 4}s" repeatCount="indefinite" />
+        </circle>`;
+      return `${spin}
+        <circle cx="${d.x}" cy="${d.y}" r="24" fill="${C.surface}" stroke="${C.ringBright}" stroke-width="1.5" />
+        <text x="${d.x}" y="${d.y + 6}" text-anchor="middle" fill="${C.inkStrong}" font-size="16"
+              font-weight="800" font-family="Archivo, sans-serif">${d.count}</text>
+        <text x="${d.x}" y="${d.y - 42}" text-anchor="middle" fill="${C.sportsGlow}" font-size="12"
+              font-weight="800" letter-spacing="3" font-family="Archivo, sans-serif"
+              filter="url(#textGlowMap)">${esc(d.label)}</text>`;
+    }).join("");
+
+    const nodeMarkup = nodes.map((n, i) => {
+      const v = n.v;
+      const color = C[v.vibe];
+      const tip = `<strong>${esc(v.name)}</strong><br>${esc(v.hoodLabel)} · ${esc(VIBE_LABELS[v.vibe] || v.vibe)}<br>${esc(v.music.map((m) => MUSIC_LABELS[m] || m).join(" · "))}<br>${esc(v.cover)}${n.open ? " · <strong>open tonight</strong>" : ""} · click to open`;
+
+      // Label reads outward from the hub; flip near a canvas edge so it never clips
+      let anchor = Math.sin((n.angle * Math.PI) / 180) >= 0 ? "start" : "end";
+      let lx = n.x + (anchor === "start" ? 14 : -14);
+      if (anchor === "end" && lx < 118) { anchor = "start"; lx = n.x + 14; }
+      if (anchor === "start" && lx > W - 118) { anchor = "end"; lx = n.x - 14; }
+
+      const ping = n.open && !reduceMotion ? `
+        <circle cx="${n.x}" cy="${n.y}" r="8" fill="none" stroke="${color}" stroke-width="1.5" opacity="0">
+          <animate attributeName="r" values="8;26" dur="2.8s" begin="${(i % 5) * 0.45}s" repeatCount="indefinite" />
+          <animate attributeName="opacity" values="0.75;0" dur="2.8s" begin="${(i % 5) * 0.45}s" repeatCount="indefinite" />
+        </circle>` : "";
+
+      return `${ping}
+        <circle cx="${n.x}" cy="${n.y}" r="8" fill="${color}" stroke="${C.surface}" stroke-width="2.5"
+                filter="url(#pinGlow)" pointer-events="none" />
+        ${n.open ? `<circle cx="${n.x}" cy="${n.y}" r="3" fill="${C.surface}" pointer-events="none" />` : ""}
+        <text x="${lx}" y="${n.y + 4}" text-anchor="${anchor}" fill="${C.inkStrong}" font-size="11.5"
+              font-weight="700" font-family="Archivo, sans-serif" paint-order="stroke"
+              stroke="${C.surface}" stroke-width="3.5" pointer-events="none">${esc(v.name)}</text>
+        <circle cx="${n.x}" cy="${n.y}" r="15" fill="transparent" style="cursor:pointer"
+                data-open="${esc(v.id)}" data-tip="${esc(tip)}" />`;
+    }).join("");
+
+    const openCount = nodes.filter((n) => n.open).length;
+    const readout = `
+      <text x="20" y="${H - 16}" fill="${C.inkLabel}" font-size="11" letter-spacing="1.5"
+            font-family="JetBrains Mono, monospace">VENUES:${nodes.length} // DISTRICTS:${DISTRICTS.length} // OPEN TONIGHT:${openCount}</text>
+      <text x="${W - 20}" y="${H - 16}" text-anchor="end" fill="${C.inkFaint}" font-size="11"
+            letter-spacing="1.5" font-family="JetBrains Mono, monospace">${esc(today.toUpperCase())} // CITY.MAP</text>`;
+
     el.innerHTML = `
-      <svg viewBox="0 0 ${W} ${H}" style="width:100%;height:auto" role="img" aria-label="Schematic map of downtown Toronto nightlife venues">
+      <svg viewBox="0 0 ${W} ${H}" style="width:100%;height:auto;display:block" role="img"
+           aria-label="Constellation map of Toronto nightlife districts; each district hub shows its venue count with venues arranged around it. Every venue is clickable.">
         <defs>
           <filter id="pinGlow" x="-80%" y="-80%" width="260%" height="260%">
-            <feGaussianBlur stdDeviation="2.6" result="b" />
+            <feGaussianBlur stdDeviation="2.8" result="b" />
             <feMerge><feMergeNode in="b" /><feMergeNode in="SourceGraphic" /></feMerge>
           </filter>
           <filter id="textGlowMap" x="-30%" y="-60%" width="160%" height="220%">
             <feGaussianBlur stdDeviation="1.2" result="b" />
             <feMerge><feMergeNode in="b" /><feMergeNode in="SourceGraphic" /></feMerge>
           </filter>
-          <pattern id="dotGrid" width="26" height="26" patternUnits="userSpaceOnUse">
-            <circle cx="1.2" cy="1.2" r="1.2" fill="rgba(158,148,232,0.13)" />
+          <pattern id="dotGrid" width="30" height="30" patternUnits="userSpaceOnUse">
+            <circle cx="1.2" cy="1.2" r="1.2" fill="rgba(158,148,232,0.11)" />
           </pattern>
-          <radialGradient id="mapBg" cx="50%" cy="60%" r="80%">
-            <stop offset="0%" stop-color="#181828" />
+          <radialGradient id="mapBg" cx="46%" cy="52%" r="78%">
+            <stop offset="0%" stop-color="#1a1a2c" />
             <stop offset="100%" stop-color="#101018" />
           </radialGradient>
+          <linearGradient id="lakeGrad" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="rgba(63,214,200,0)" />
+            <stop offset="100%" stop-color="rgba(63,214,200,0.15)" />
+          </linearGradient>
         </defs>
         <rect x="0" y="0" width="${W}" height="${H}" rx="12" fill="url(#mapBg)" />
         <rect x="0" y="0" width="${W}" height="${H}" rx="12" fill="url(#dotGrid)" />
-        ${lake}${streets}${zoneLabels}${pins}
+        <rect x="0" y="${H - 52}" width="${W}" height="52" fill="url(#lakeGrad)" />
+        <text x="${W / 2}" y="${H - 34}" text-anchor="middle" fill="${C.loungeGlow}" opacity="0.75"
+              font-size="11" letter-spacing="6" font-family="JetBrains Mono, monospace">≈ ≈ LAKE ONTARIO ≈ ≈</text>
+        ${corridorMarkup}${ringMarkup}${spokes}${nodeMarkup}${hubMarkup}${readout}
       </svg>`;
 
     document.getElementById("mapLegend").innerHTML = ["club", "barclub", "lounge"]
       .map((v) => `<span class="legend-item"><span class="legend-dot" style="background:${C[v]}"></span>${VIBE_LABELS[v]}</span>`)
-      .join("");
+      .join("") + `<span class="legend-item"><span class="legend-ring"></span>Open tonight</span>`;
 
     bindTips(el);
   }

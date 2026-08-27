@@ -458,6 +458,10 @@ a { color: inherit; }
 .viz-legend { display: flex; gap: 14px; flex-wrap: wrap; }
 .legend-item { display: inline-flex; align-items: center; gap: 6px; color: var(--text-dim); font-size: 0.8rem; font-weight: 600; }
 .legend-dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; }
+.legend-ring {
+  width: 10px; height: 10px; border-radius: 50%; display: inline-block;
+  border: 1.5px solid var(--text-dim); background: transparent;
+}
 
 .viz-scroll { overflow-x: auto; }
 .viz-note { color: var(--text-faint); font-size: 0.76rem; margin-top: 10px; }
