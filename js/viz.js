@@ -372,9 +372,9 @@
         </button>`;
       return `
         <section class="zone-card">
-          <header class="zone-head">
+          <header class="zone-head zone-head-btn" data-hood-jump="${esc(z.key)}" role="button" tabindex="0">
             <h4 class="zone-name">${esc(z.label)}</h4>
-            <span class="zone-count ${open.length ? "" : "zero"}">${open.length} open</span>
+            <span class="zone-count ${open.length ? "" : "zero"}">${open.length} open ›</span>
           </header>
           <div class="zone-venues">${open.map((v) => row(v, true)).join("")}${shut.map((v) => row(v, false)).join("")}</div>
         </section>`;
@@ -383,7 +383,7 @@
     el.innerHTML = `
       <p class="map-summary">
         <strong>${openTotal} rooms open ${isTonight ? "tonight" : FULL_DAY[night]}</strong>
-        <span>${freeTotal} with no cover · tap a room for details</span>
+        <span>${freeTotal} with no cover · tap a room, or a neighbourhood</span>
       </p>
       <div class="zone-list">${zones}</div>`;
 
@@ -472,15 +472,24 @@
       <line x1="${n.hub.x}" y1="${n.hub.y}" x2="${n.x}" y2="${n.y}" stroke="${C[n.v.vibe]}"
             stroke-width="1" opacity="${n.open ? 0.3 : 0.12}" />`).join("");
 
-    const hubMarkup = DISTRICTS.map((d) => `
-      <circle cx="${d.x}" cy="${d.y}" r="25" fill="${C.surface}"
-              stroke="${d.open ? C.loungeGlow : C.ring}" stroke-width="1.6" />
-      <text x="${d.x}" y="${d.y + 3}" text-anchor="middle" fill="${d.open ? C.inkStrong : C.inkFaint}"
-            font-size="17" font-weight="800" font-family="Archivo, sans-serif">${d.open}</text>
-      <text x="${d.x}" y="${d.y + 15}" text-anchor="middle" fill="${C.inkFaint}" font-size="8"
-            letter-spacing="0.8" font-family="JetBrains Mono, monospace">OPEN</text>
-      <text x="${d.x}" y="${d.y - 40}" text-anchor="middle" fill="${C.sportsGlow}" font-size="12"
-            font-weight="800" letter-spacing="2.5" font-family="Archivo, sans-serif">${esc(d.label)}</text>`).join("");
+    const hubMarkup = DISTRICTS.map((d) => {
+      const tip = `<strong>${esc(d.label)}</strong><br>${d.open} of ${d.total} rooms open ${esc(night)}<br>tap to see all of them`;
+      return `
+      <g class="map-hub" data-hood-jump="${esc(d.key)}" data-tip="${esc(tip)}" role="button" tabindex="0"
+         aria-label="${esc(d.label)}, ${d.open} rooms open, see all">
+        <circle class="hub-halo" cx="${d.x}" cy="${d.y}" r="33" fill="none"
+                stroke="${d.open ? C.loungeGlow : C.ring}" stroke-width="1.5" />
+        <circle class="hub-ring" cx="${d.x}" cy="${d.y}" r="25" fill="${C.surface}"
+                stroke="${d.open ? C.loungeGlow : C.ring}" stroke-width="1.6" />
+        <text x="${d.x}" y="${d.y + 3}" text-anchor="middle" fill="${d.open ? C.inkStrong : C.inkFaint}"
+              font-size="17" font-weight="800" font-family="Archivo, sans-serif">${d.open}</text>
+        <text x="${d.x}" y="${d.y + 15}" text-anchor="middle" fill="${C.inkFaint}" font-size="8"
+              letter-spacing="0.8" font-family="JetBrains Mono, monospace">OPEN</text>
+        <text class="hub-label" x="${d.x}" y="${d.y - 40}" text-anchor="middle" fill="${C.sportsGlow}"
+              font-size="12" font-weight="800" letter-spacing="2.5"
+              font-family="Archivo, sans-serif">${esc(d.label)}</text>
+      </g>`;
+    }).join("");
 
     const genreOf = (v) => (v.music || []).slice(0, 2).map((m) => MUSIC_LABELS[m] || m).join(", ");
 
@@ -493,16 +502,22 @@
       if (anchor === "end" && lx < 120) { anchor = "start"; lx = x + 14; }
       if (anchor === "start" && lx > W - 120) { anchor = "end"; lx = x - 14; }
 
+      // The whole group is the hit target — dot and name alike. A 5px dot was
+      // never an obvious tap target on its own.
       return `
-        <circle cx="${x}" cy="${y}" r="${open ? 8 : 5.5}" fill="${color}" stroke="${C.surface}"
-                stroke-width="2.5" opacity="${open ? 1 : 0.42}"
-                ${open ? 'filter="url(#pinGlow)"' : ""} pointer-events="none" />
-        <text x="${lx}" y="${y + 4}" text-anchor="${anchor}" fill="${open ? C.inkStrong : C.inkFaint}"
-              font-size="${open ? 12 : 11}" font-weight="${open ? 700 : 600}"
-              font-family="Archivo, sans-serif" paint-order="stroke" stroke="${C.surface}"
-              stroke-width="3.5" opacity="${open ? 1 : 0.7}" pointer-events="none">${esc(v.name)}</text>
-        <circle cx="${x}" cy="${y}" r="15" fill="transparent" style="cursor:pointer"
-                data-open="${esc(v.id)}" data-tip="${esc(tip)}" />`;
+        <g class="map-pin ${open ? "" : "is-shut"}" data-open="${esc(v.id)}" data-tip="${esc(tip)}"
+           role="button" tabindex="0" aria-label="${esc(v.name)}${open ? "" : ", closed " + esc(night)}">
+          <circle class="pin-halo" cx="${x}" cy="${y}" r="15" fill="none" stroke="${color}" stroke-width="1.5" />
+          <circle class="pin-hit" cx="${x}" cy="${y}" r="15" fill="transparent" />
+          <circle class="pin-dot" cx="${x}" cy="${y}" r="${open ? 8 : 5.5}" fill="${color}"
+                  stroke="${C.surface}" stroke-width="2.5" opacity="${open ? 1 : 0.42}"
+                  ${open ? 'filter="url(#pinGlow)"' : ""} />
+          <text class="pin-label" x="${lx}" y="${y + 4}" text-anchor="${anchor}"
+                fill="${open ? C.inkStrong : C.inkFaint}" font-size="${open ? 12 : 11}"
+                font-weight="${open ? 700 : 600}" font-family="Archivo, sans-serif"
+                paint-order="stroke" stroke="${C.surface}" stroke-width="3.5"
+                opacity="${open ? 1 : 0.7}">${esc(v.name)}</text>
+        </g>`;
     }).join("");
 
     const openTotal = nodes.filter((n) => n.open).length;
@@ -511,7 +526,7 @@
     el.innerHTML = `
       <p class="map-summary">
         <strong>${openTotal} rooms open ${isTonight ? "tonight" : FULL_DAY[night]}</strong>
-        <span>${freeTotal} with no cover · tap a pin for details</span>
+        <span>${freeTotal} with no cover · tap a room, or a neighbourhood circle</span>
       </p>
       <svg viewBox="0 0 ${W} ${H}" style="width:100%;height:auto;display:block" role="img"
            aria-label="Map of Toronto nightlife districts for ${esc(night)}: ${openTotal} rooms open. Each pin is a venue and opens its details.">

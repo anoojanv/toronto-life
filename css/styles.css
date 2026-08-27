@@ -681,6 +681,20 @@ a { color: inherit; }
   .map-card { padding: 16px 14px 12px; }
 }
 
+
+/* map affordances: everything you can tap says so */
+.map-pin, .map-hub { cursor: pointer; }
+.map-pin .pin-halo, .map-hub .hub-halo { opacity: 0; transition: opacity 0.15s; }
+.map-pin:hover .pin-halo, .map-pin:focus-visible .pin-halo,
+.map-hub:hover .hub-halo, .map-hub:focus-visible .hub-halo { opacity: 0.75; }
+.map-pin:hover .pin-label { fill: #fff; }
+.map-hub:hover .hub-label { fill: #f3c766; }
+.map-pin:focus-visible, .map-hub:focus-visible { outline: none; }
+.map-pin.is-shut:hover .pin-dot { opacity: 0.8; }
+
+.zone-head-btn { cursor: pointer; }
+.zone-head-btn:hover .zone-name { color: #3fd6c8; }
+
 /* ---------- side quest (sports, deliberately demoted) ---------- */
 
 .navlink-quest { opacity: 0.82; }
