@@ -5,10 +5,10 @@
   --bg-raised: #14141c;
   --bg-card: #171722;
   --bg-card-hover: #1d1d2b;
-  --line: #262636;
+  --line: #30304a;
   --text: #f2f0ec;
   --text-dim: #a3a0b0;
-  --text-faint: #6f6c80;
+  --text-faint: #85829c;
   --gold: #e8b64c;
   --gold-soft: rgba(232, 182, 76, 0.14);
   --purple: #8d6bf3;
@@ -601,6 +601,18 @@ a { color: inherit; }
 .ctx-fill { display: block; height: 100%; border-radius: 4px 4px 4px 4px; background: #3a3a52; }
 .ctx-fill.self { background: #b8841f; }
 .ctx-value { font-family: var(--mono); font-size: 0.78rem; color: var(--text); text-align: right; }
+
+/* ---------- instagram links ---------- */
+
+.ig-btn {
+  background: linear-gradient(45deg, rgba(131, 58, 180, 0.25), rgba(225, 48, 108, 0.25), rgba(253, 89, 73, 0.25));
+  border-color: rgba(225, 48, 108, 0.5) !important;
+  color: #ffb3c9 !important;
+}
+.ig-btn:hover { border-color: #e1306c !important; color: #fff !important; }
+
+.ig-inline { color: #ffb3c9; text-decoration: none; font-weight: 600; }
+.ig-inline:hover { text-decoration: underline; }
 
 /* ---------- HUD / pulse-net chrome ---------- */
 

@@ -144,7 +144,10 @@
         <div class="nights-row">${nightDots}</div>
         <div class="card-bottom">
           <span class="price cheap"><span class="from">Cover</span>${esc(v.cover.split(",")[0])}</span>
-          <div class="ticket-links"><a class="tix-btn primary" href="${mapsUrl(v.name + " " + v.address)}" target="_blank" rel="noopener">Map</a></div>
+          <div class="ticket-links">
+            ${v.instagram ? `<a class="tix-btn ig-btn" href="https://www.instagram.com/${esc(v.instagram)}/" target="_blank" rel="noopener">◉ IG</a>` : ""}
+            <a class="tix-btn primary" href="${mapsUrl(v.name + " " + v.address)}" target="_blank" rel="noopener">Map</a>
+          </div>
         </div>
       </article>`;
   }
@@ -208,7 +211,7 @@
       html = `
         <p class="modal-kicker">${esc(item.hoodLabel)} · ${esc(VIBE_LABELS[item.vibe] || item.vibe)}</p>
         <h2 class="modal-title">${esc(item.name)}</h2>
-        <p class="modal-sub">${esc(item.address)}</p>
+        <p class="modal-sub">${esc(item.address)}${item.instagram ? ` · <a class="ig-inline" href="https://www.instagram.com/${esc(item.instagram)}/" target="_blank" rel="noopener">@${esc(item.instagram)}</a>` : ""}</p>
         <p class="modal-desc">${esc(item.desc)}</p>
         <div class="tag-row">${item.music.map((g) => `<span class="tag genre-${g === "dancehall" ? "reggae" : g}">${esc(MUSIC_LABELS[g] || g)}</span>`).join("")}</div>
         <h4 class="modal-h4">Nights it goes</h4>
@@ -216,8 +219,8 @@
         <h4 class="modal-h4">Cover</h4>
         <p class="modal-desc">${esc(item.cover)}</p>
         <div class="modal-actions">
+          ${item.instagram ? `<a class="tix-btn ig-btn" href="https://www.instagram.com/${esc(item.instagram)}/" target="_blank" rel="noopener">◉ @${esc(item.instagram)}</a>` : ""}
           <a class="tix-btn primary" href="${mapsUrl(item.name + " " + item.address)}" target="_blank" rel="noopener">Open in Maps</a>
-          <a class="tix-btn" href="https://www.google.com/search?q=${encodeURIComponent(item.name + " Toronto instagram")}" target="_blank" rel="noopener">Find on Instagram</a>
           <button class="tix-btn save-toggle" data-save="${esc(item.id)}">${state.saved.has(item.id) ? "★ Saved" : "☆ Save to lineup"}</button>
         </div>`;
     } else {
