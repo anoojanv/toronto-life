@@ -52,6 +52,7 @@
   /* ---------- stat tiles ---------- */
 
   function renderStats(S) {
+    if (!document.getElementById("statRow")) return;
     const { state, esc, todayISO, todayDayName } = S;
     const today = todayISO();
     const week = new Date(); week.setDate(week.getDate() + 7);
@@ -85,6 +86,7 @@
      at their next open night). Every node is clickable. */
 
   function renderPulseNet(S) {
+    if (!document.getElementById("pulseNet")) return;
     const { state, esc, fmtDate, dayOf, todayDayName } = S;
     const el = document.getElementById("pulseNet");
     const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -287,6 +289,7 @@
   /* ---------- tonight ---------- */
 
   function renderTonight(S) {
+    if (!document.getElementById("tonightList")) return;
     const { state, esc, todayISO, todayDayName, MUSIC_LABELS } = S;
     const el = document.getElementById("tonightList");
     const today = todayISO();
@@ -320,6 +323,7 @@
   /* ---------- venue map ---------- */
 
   function renderMap(S) {
+    if (!document.getElementById("mapViz")) return;
     const { state, esc, VIBE_LABELS, MUSIC_LABELS } = S;
     const el = document.getElementById("mapViz");
     const venues = state.data.nightlife.filter((v) => v.lat && v.lng);
@@ -438,10 +442,10 @@
   function renderAllViz() {
     const S = window.SIX;
     if (!S || !S.state.data) return;
-    renderStats(S);
-    renderPulseNet(S);
-    renderTonight(S);
-    renderMap(S);
+    // Each panel renders independently — one failure must never blank the rest
+    [renderStats, renderPulseNet, renderTonight, renderMap].forEach((fn) => {
+      try { fn(S); } catch (err) { console.error("viz panel failed:", fn.name, err); }
+    });
   }
 
   document.addEventListener("six:data", renderAllViz);
