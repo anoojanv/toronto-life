@@ -619,6 +619,134 @@ a { color: inherit; }
 .ig-inline:hover { text-decoration: underline; }
 
 
+
+/* ---------- CITY MAP: calm neighbourhood grid ----------
+   Plain text in geographic cards. No dashes, glow, or grid texture —
+   the anti-pattern list is explicit that dashing reads as noise. */
+
+.map-orient {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.72rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+  margin-bottom: 12px;
+}
+.map-orient span:nth-child(2) { color: var(--text-dim); font-weight: 700; }
+
+.map-grid {
+  display: grid;
+  gap: 14px;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-areas:
+    "oss  qw  york"
+    "key  kw  ent";
+  align-items: start;   /* cards hug their content instead of stretching to dead space */
+}
+
+.zone-card {
+  background: var(--bg-raised);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 14px 15px 12px;
+}
+.zone-card.all-shut { opacity: 0.55; }
+
+.zone-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 10px;
+  padding-bottom: 9px;
+  border-bottom: 1px solid var(--line);
+}
+.zone-name { font-size: 0.95rem; font-weight: 800; letter-spacing: -0.01em; }
+
+.zone-count {
+  font-size: 0.72rem;
+  font-weight: 700;
+  white-space: nowrap;
+  color: #3fd6c8;
+  background: rgba(63, 214, 200, 0.12);
+  border-radius: 999px;
+  padding: 3px 9px;
+}
+.zone-count.zero { color: var(--text-faint); background: transparent; }
+
+.zone-venues { display: flex; flex-direction: column; gap: 2px; }
+
+.zone-venue {
+  display: grid;
+  grid-template-columns: 10px 1fr;
+  grid-template-areas: "dot name" ".  meta";
+  gap: 1px 9px;
+  align-items: center;
+  width: 100%;
+  text-align: left;
+  background: none;
+  border: none;
+  border-radius: 8px;
+  padding: 7px 8px;
+  transition: background 0.12s;
+}
+.zone-venue:hover { background: var(--bg-card-hover); }
+.zone-venue:focus-visible { outline: 2px solid var(--purple); outline-offset: 1px; }
+
+.zv-dot {
+  grid-area: dot;
+  width: 9px; height: 9px;
+  border-radius: 50%;
+  display: inline-block;
+}
+.vibe-club { background: #b8841f; }
+.vibe-barclub { background: #8d6bf3; }
+.vibe-lounge { background: #1f9d92; }
+
+.zv-name { grid-area: name; font-size: 0.9rem; font-weight: 700; color: var(--text); }
+.zv-meta { grid-area: meta; font-size: 0.75rem; color: var(--text-dim); }
+
+.zone-venue.is-shut { opacity: 0.45; }
+.zone-venue.is-shut .zv-name { font-weight: 600; }
+
+/* summary + key tile, sitting in the empty south-west cell */
+.zone-key {
+  grid-area: key;
+  background: linear-gradient(155deg, rgba(63, 214, 200, 0.1), var(--bg-raised) 65%);
+  border: 1px solid rgba(63, 214, 200, 0.3);
+  border-radius: 14px;
+  padding: 15px;
+}
+.key-title { font-size: 0.72rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--text-faint); }
+.key-big { font-size: 1.9rem; font-weight: 900; line-height: 1.1; color: #3fd6c8; }
+.key-big span { display: block; font-size: 0.8rem; font-weight: 700; color: var(--text-dim); letter-spacing: 0; }
+.key-sub { font-size: 0.82rem; color: var(--text-dim); margin-top: 2px; }
+
+.key-list { list-style: none; margin: 13px 0 11px; display: flex; flex-direction: column; gap: 6px; }
+.key-list li { display: flex; align-items: center; gap: 8px; font-size: 0.78rem; color: var(--text-dim); }
+
+.key-hint { font-size: 0.74rem; color: var(--text-faint); line-height: 1.45; }
+
+.map-lake {
+  text-align: center;
+  font-size: 0.7rem;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+  margin-top: 14px;
+  padding-top: 12px;
+  border-top: 1px solid var(--line);
+}
+
+@media (max-width: 860px) {
+  .map-grid { grid-template-columns: 1fr 1fr; grid-template-areas: "oss qw" "york kw" "ent key"; }
+}
+@media (max-width: 560px) {
+  .map-grid { grid-template-columns: 1fr; grid-template-areas: "key" "kw" "oss" "qw" "ent" "york"; }
+  .map-orient span:nth-child(1), .map-orient span:nth-child(3) { display: none; }
+}
+
 /* ---------- side quest (sports, deliberately demoted) ---------- */
 
 .navlink-quest { opacity: 0.82; }

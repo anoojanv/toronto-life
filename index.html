@@ -9,7 +9,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Archivo:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="css/styles.css?v=6" />
+  <link rel="stylesheet" href="css/styles.css?v=7" />
 </head>
 <body>
 
@@ -62,23 +62,25 @@
     <section class="tab-panel active" id="panel-pulse">
       <div class="panel-head">
         <h2>🌃 The Pulse</h2>
-        <p>The night, mapped. Pick a night up in the day strip and the map re-plans around it — click any room to open it.</p>
+        <p>Start here: who's open, where, and what it costs. Pick a night in the strip above and everything below follows.</p>
       </div>
 
       <div class="stat-row" id="statRow"></div>
 
-      <div class="viz-card hud-card hud-hero">
+      <div class="viz-card map-card">
         <div class="viz-head">
-          <h3 class="hud-title"><span class="hud-status-dot"></span>CITY.MAP <span class="hud-title-dim">// where the music lives</span></h3>
+          <div>
+            <h3 class="map-title">Where to go</h3>
+            <p class="map-sub">Every room worth knowing, by neighbourhood. Pick a night above and this updates.</p>
+          </div>
           <div class="viz-legend" id="mapLegend"></div>
         </div>
         <div id="mapViz"></div>
-        <p class="viz-note">Districts sit roughly where they do in the city. Each hub counts the rooms open on your chosen night; glowing pins are open, with their music and cover on the label, and the dashed line is the walk between them. Dimmed pins are dark that night.</p>
       </div>
 
-      <div class="viz-card hud-card">
+      <div class="viz-card hud-card hidden" id="todayCard">
         <div class="viz-head">
-          <h3 class="hud-title"><span class="hud-status-dot"></span>TONIGHT <span class="hud-title-dim">// live now</span></h3>
+          <h3 class="hud-title"><span class="hud-status-dot"></span>TODAY <span class="hud-title-dim">// shows &amp; games on tonight</span></h3>
         </div>
         <div id="tonightList"></div>
       </div>
@@ -244,7 +246,7 @@
 
   <div class="viz-tooltip hidden" id="vizTooltip"></div>
 
-  <script src="js/app.js?v=6"></script>
-  <script src="js/viz.js?v=6"></script>
+  <script src="js/app.js?v=7"></script>
+  <script src="js/viz.js?v=7"></script>
 </body>
 </html>
