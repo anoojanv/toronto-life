@@ -1067,8 +1067,7 @@
       "desc": "King West's reliable hip-hop room — Thursday is the weeknight move, Toronto DJs on rotation.",
       "address": "577 King St W",
       "lat": 43.6444,
-      "lng": -79.4008,
-      "instagram": "lost577"
+      "lng": -79.4008
     },
     {
       "id": "n-pettycash",
@@ -1091,32 +1090,7 @@
       "desc": "Basement bar-turned-dancefloor off King — throwback hip-hop and R&B, low pretension, high humidity.",
       "address": "487 Adelaide St W",
       "lat": 43.6463,
-      "lng": -79.399,
-      "instagram": "pettycashto"
-    },
-    {
-      "id": "n-callherjuliet",
-      "name": "Call Her Juliet",
-      "hood": "kingwest",
-      "hoodLabel": "King West",
-      "vibe": "lounge",
-      "music": [
-        "rnb",
-        "hiphop"
-      ],
-      "nights": [
-        "Wed",
-        "Thu",
-        "Fri",
-        "Sat"
-      ],
-      "cover": "Free–$10 weeknights",
-      "coverMin": 0,
-      "desc": "R&B-first lounge that turns into a party — the Wednesday/Thursday option when you want vibes without a full club night.",
-      "address": "553 King St W",
-      "lat": 43.6446,
-      "lng": -79.4,
-      "instagram": "callherjuliet"
+      "lng": -79.399
     },
     {
       "id": "n-baro",
@@ -1216,8 +1190,7 @@
       "desc": "Apartment-styled bar with pool table and a hip-hop soundtrack seven nights a week — the best free weeknight hang on this list.",
       "address": "1034 Queen St W",
       "lat": 43.6437,
-      "lng": -79.4187,
-      "instagram": "apt200to"
+      "lng": -79.4187
     },
     {
       "id": "n-paintedlady",
@@ -1266,8 +1239,7 @@
       "desc": "Beloved Dundas West basement — R&B and house-leaning selectors, sweaty in the best way. Line moves fast on Thursdays.",
       "address": "1265 Dundas St W",
       "lat": 43.6497,
-      "lng": -79.428,
-      "instagram": "bambistoronto"
+      "lng": -79.428
     },
     {
       "id": "n-rhum",
@@ -1317,8 +1289,7 @@
       "desc": "Hidden behind a corner-store front — pink-lit lounge with R&B-leaning DJs. Come early Thursday, it's small.",
       "address": "1276 Dundas St W",
       "lat": 43.6494,
-      "lng": -79.4285,
-      "instagram": "mahjongbar"
+      "lng": -79.4285
     },
     {
       "id": "n-soluna",
@@ -1387,8 +1358,7 @@
       "desc": "The big-room King West club in the old Toybox space — hip-hop-leaning main floor, dress code enforced, lines by midnight.",
       "address": "473 Adelaide St W",
       "lat": 43.6465,
-      "lng": -79.3999,
-      "instagram": "dprtmnt"
+      "lng": -79.3999
     },
     {
       "id": "n-drakehotel",
@@ -1415,8 +1385,30 @@
       "desc": "Queen West institution — DJs in the lounge and Sky Yard most nights, live R&B and soul in the basement Underground.",
       "address": "1150 Queen St W",
       "lat": 43.6431,
-      "lng": -79.4245,
-      "instagram": "thedrakehotel"
+      "lng": -79.4245
+    },
+    {
+      "id": "n-dnd",
+      "name": "DND Toronto",
+      "hood": "queenwest",
+      "hoodLabel": "Queen West",
+      "vibe": "club",
+      "music": [
+        "hiphop",
+        "rnb"
+      ],
+      "nights": [
+        "Thu",
+        "Fri",
+        "Sat"
+      ],
+      "cover": "$20, guestlist before 11:30",
+      "coverMin": 20,
+      "desc": "Queen West club that leans hard hip-hop and R&B — dress code enforced, guestlist-driven, busy by midnight.",
+      "address": "550 Queen St W",
+      "lat": 43.647,
+      "lng": -79.4035,
+      "instagram": "dndtoronto"
     }
   ]
 }

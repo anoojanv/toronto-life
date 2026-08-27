@@ -695,6 +695,50 @@ a { color: inherit; }
 .zone-head-btn { cursor: pointer; }
 .zone-head-btn:hover .zone-name { color: #3fd6c8; }
 
+
+/* ---------- neighbourhood popup ---------- */
+
+.modal-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: var(--bg-raised);
+  border: 1px solid var(--line);
+  color: var(--text-dim);
+  font-size: 0.8rem;
+  font-weight: 700;
+  padding: 6px 12px;
+  border-radius: 999px;
+  margin-bottom: 14px;
+  transition: all 0.15s;
+}
+.modal-back:hover { color: var(--text); border-color: var(--text-faint); }
+
+.hood-rows { display: flex; flex-direction: column; gap: 3px; margin-top: 4px; }
+
+.hood-row {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  width: 100%;
+  text-align: left;
+  background: none;
+  border: 1px solid transparent;
+  border-radius: 10px;
+  padding: 10px 11px;
+  transition: background 0.12s, border-color 0.12s;
+}
+.hood-row:hover { background: var(--bg-raised); border-color: var(--line); }
+.hood-row:focus-visible { outline: 2px solid var(--purple); outline-offset: 1px; }
+.hood-row.is-shut { opacity: 0.5; }
+
+.hood-row-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+.hood-row-main { flex: 1; min-width: 0; display: flex; flex-direction: column; }
+.hood-row-name { font-size: 0.95rem; font-weight: 700; color: var(--text); }
+.hood-row-meta { font-size: 0.78rem; color: var(--text-dim); }
+.hood-row-go { color: var(--text-faint); font-size: 1.1rem; flex-shrink: 0; }
+.hood-row:hover .hood-row-go { color: var(--gold); }
+
 /* ---------- side quest (sports, deliberately demoted) ---------- */
 
 .navlink-quest { opacity: 0.82; }

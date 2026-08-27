@@ -239,7 +239,7 @@
           <circle cx="${x}" cy="${y}" r="${r}" fill="${color}" stroke="${C.surface}" stroke-width="2.5" filter="url(#nodeGlow)" pointer-events="none" />
           <text x="${x}" y="${y + 4}" text-anchor="middle" fill="${C.surface}" font-size="11" font-weight="800" font-family="Archivo, sans-serif" pointer-events="none">${n.count}</text>
           <text x="${x}" y="${y + r + 15}" text-anchor="middle" fill="${C.inkLabel}" font-size="10" letter-spacing="1.2" font-family="JetBrains Mono, monospace" paint-order="stroke" stroke="${C.surface}" stroke-width="3" pointer-events="none">${esc(n.district.label)}</text>
-          <circle cx="${x}" cy="${y}" r="${r + 8}" fill="transparent" style="cursor:pointer" data-hood-jump="${esc(n.district.key)}" data-tip="${esc(tip)}" />`;
+          <circle cx="${x}" cy="${y}" r="${r + 8}" fill="transparent" style="cursor:pointer" data-hood-modal="${esc(n.district.key)}" data-tip="${esc(tip)}" />`;
       }
 
       const it = n.item;
@@ -372,7 +372,7 @@
         </button>`;
       return `
         <section class="zone-card">
-          <header class="zone-head zone-head-btn" data-hood-jump="${esc(z.key)}" role="button" tabindex="0">
+          <header class="zone-head zone-head-btn" data-hood-modal="${esc(z.key)}" role="button" tabindex="0">
             <h4 class="zone-name">${esc(z.label)}</h4>
             <span class="zone-count ${open.length ? "" : "zero"}">${open.length} open ›</span>
           </header>
@@ -473,9 +473,9 @@
             stroke-width="1" opacity="${n.open ? 0.3 : 0.12}" />`).join("");
 
     const hubMarkup = DISTRICTS.map((d) => {
-      const tip = `<strong>${esc(d.label)}</strong><br>${d.open} of ${d.total} rooms open ${esc(night)}<br>tap to see all of them`;
+      const tip = `<strong>${esc(d.label)}</strong><br>${d.open} of ${d.total} rooms open ${esc(night)}<br>tap for the full list`;
       return `
-      <g class="map-hub" data-hood-jump="${esc(d.key)}" data-tip="${esc(tip)}" role="button" tabindex="0"
+      <g class="map-hub" data-hood-modal="${esc(d.key)}" data-tip="${esc(tip)}" role="button" tabindex="0"
          aria-label="${esc(d.label)}, ${d.open} rooms open, see all">
         <circle class="hub-halo" cx="${d.x}" cy="${d.y}" r="33" fill="none"
                 stroke="${d.open ? C.loungeGlow : C.ring}" stroke-width="1.5" />

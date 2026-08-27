@@ -97,6 +97,12 @@
       .join("")}</div>`;
   }
 
+  function igUrl(v) {
+    return v.instagram
+      ? `https://www.instagram.com/${encodeURIComponent(v.instagram)}/`
+      : `https://www.instagram.com/explore/search/keyword/?q=${encodeURIComponent((v.name || "") + " Toronto")}`;
+  }
+
   function mapsUrl(q) {
     return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(q + " Toronto")}`;
   }
@@ -145,7 +151,7 @@
         <div class="card-bottom">
           <span class="price cheap"><span class="from">Cover</span>${esc(v.cover.split(",")[0])}</span>
           <div class="ticket-links">
-            ${v.instagram ? `<a class="tix-btn ig-btn" href="https://www.instagram.com/${esc(v.instagram)}/" target="_blank" rel="noopener">◉ IG</a>` : ""}
+            <a class="tix-btn ig-btn" href="${igUrl(v)}" target="_blank" rel="noopener">${v.instagram ? "◉ IG" : "◉ Find IG"}</a>
             <a class="tix-btn primary" href="${mapsUrl(v.name + " " + v.address)}" target="_blank" rel="noopener">Map</a>
           </div>
         </div>
@@ -200,7 +206,50 @@
       </div>`;
   }
 
-  function openModal(id) {
+  const HOOD_LABELS = {
+    kingwest: "King West", ossington: "Ossington / Dundas W", queenwest: "Queen West",
+    yorkville: "Yorkville", ent: "Entertainment District",
+  };
+
+  // Tapping a neighbourhood used to navigate to another tab with no way back.
+  // It now opens a popup listing that hood's rooms; drilling into a room keeps
+  // a back link to this list, so the map is never lost.
+  function openHoodModal(hoodKey) {
+    if (!state.data) return;
+    const DAY_SEQ = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
+    const night = DAY_SEQ.includes(state.day) ? state.day : todayDayName();
+    const list = state.data.nightlife.filter((v) => v.hood === hoodKey);
+    if (!list.length) return;
+    const open = list.filter((v) => v.nights.includes(night));
+    const shut = list.filter((v) => !v.nights.includes(night));
+
+    const row = (v, isOpen) => `
+      <button class="hood-row ${isOpen ? "" : "is-shut"}" data-open="${esc(v.id)}" data-from="${esc(hoodKey)}">
+        <span class="hood-row-dot vibe-${esc(v.vibe)}"></span>
+        <span class="hood-row-main">
+          <span class="hood-row-name">${esc(v.name)}</span>
+          <span class="hood-row-meta">${isOpen
+            ? esc(v.music.slice(0, 2).map((m) => MUSIC_LABELS[m] || m).join(", ")) + " · " + esc(v.coverMin === 0 ? "No cover" : "$" + v.coverMin + "+")
+            : "Closed " + esc(night)}</span>
+        </span>
+        <span class="hood-row-go">›</span>
+      </button>`;
+
+    modalBody.innerHTML = `
+      <p class="modal-kicker">${esc(open.length)} of ${list.length} open ${esc(night)}</p>
+      <h2 class="modal-title">${esc(HOOD_LABELS[hoodKey] || hoodKey)}</h2>
+      <div class="hood-rows">
+        ${open.map((v) => row(v, true)).join("")}
+        ${shut.map((v) => row(v, false)).join("")}
+      </div>
+      <div class="modal-actions">
+        <button class="tix-btn primary" data-hood-jump="${esc(hoodKey)}">Open in Nightlife tab</button>
+      </div>`;
+    backdrop.classList.remove("hidden");
+    document.body.style.overflow = "hidden";
+  }
+
+  function openModal(id, from) {
     const item = findItem(id);
     if (!item) return;
     const isVenue = !item.date;
@@ -219,7 +268,7 @@
         <h4 class="modal-h4">Cover</h4>
         <p class="modal-desc">${esc(item.cover)}</p>
         <div class="modal-actions">
-          ${item.instagram ? `<a class="tix-btn ig-btn" href="https://www.instagram.com/${esc(item.instagram)}/" target="_blank" rel="noopener">◉ @${esc(item.instagram)}</a>` : ""}
+          <a class="tix-btn ig-btn" href="${igUrl(item)}" target="_blank" rel="noopener">${item.instagram ? "◉ @" + esc(item.instagram) : "◉ Find on Instagram"}</a>
           <a class="tix-btn primary" href="${mapsUrl(item.name + " " + item.address)}" target="_blank" rel="noopener">Open in Maps</a>
           <button class="tix-btn save-toggle" data-save="${esc(item.id)}">${state.saved.has(item.id) ? "★ Saved" : "☆ Save to lineup"}</button>
         </div>`;
@@ -241,7 +290,10 @@
           <button class="tix-btn save-toggle" data-save="${esc(item.id)}">${state.saved.has(item.id) ? "★ Saved" : "☆ Save to lineup"}</button>
         </div>`;
     }
-    modalBody.innerHTML = html;
+    const back = from && HOOD_LABELS[from]
+      ? `<button class="modal-back" data-hood-modal="${esc(from)}">‹ Back to ${esc(HOOD_LABELS[from])}</button>`
+      : "";
+    modalBody.innerHTML = back + html;
     backdrop.classList.remove("hidden");
     document.body.style.overflow = "hidden";
   }
@@ -360,6 +412,7 @@
     const jump = e.target.closest("[data-hood-jump]");
     if (!jump) return;
     const hood = jump.dataset.hoodJump;
+    closeModal();
     const chip = document.querySelector(`#hoodFilter [data-hood="${hood}"]`);
     if (chip) chip.click();
     const navBtn = nav.querySelector('.navlink[data-tab="nightlife"]');
@@ -411,14 +464,18 @@
       return;
     }
     if (e.target.closest("a")) return; // links behave as links
+    const hoodModal = e.target.closest("[data-hood-modal]");
+    if (hoodModal) { openHoodModal(hoodModal.dataset.hoodModal); return; }
     const opener = e.target.closest("[data-open]");
-    if (opener) openModal(opener.dataset.open);
+    if (opener) openModal(opener.dataset.open, opener.dataset.from);
   });
 
   document.addEventListener("keydown", (e) => {
     if (e.key !== "Enter") return;
+    const hoodEl = e.target.closest && e.target.closest("[data-hood-modal]");
+    if (hoodEl) { openHoodModal(hoodEl.dataset.hoodModal); return; }
     const opener = e.target.closest && e.target.closest("[data-open]");
-    if (opener) openModal(opener.dataset.open);
+    if (opener) openModal(opener.dataset.open, opener.dataset.from);
   });
 
   /* ---------- data loading ---------- */
@@ -428,6 +485,17 @@
     data.sports = (data.sports || []).filter((e) => e.date >= today);
     data.concerts = (data.concerts || []).filter((e) => e.date >= today);
     state.data = data;
+
+    // Saved ids outlive the things they point at: the nightly refresh drops past
+    // events and venues close. Without this the badge counts ghosts and drifts
+    // above the number of cards actually shown. Only prune once data is real.
+    const live = new Set(
+      data.sports.concat(data.concerts).map((e) => e.id)
+        .concat(data.nightlife.map((v) => v.id))
+    );
+    let dropped = false;
+    state.saved.forEach((id) => { if (!live.has(id)) { state.saved.delete(id); dropped = true; } });
+    if (dropped) persistSaved();
     renderAll();
     document.dispatchEvent(new CustomEvent("six:data"));
   }
@@ -454,6 +522,7 @@
     todayISO,
     todayDayName,
     openModal,
+    openHoodModal,
     WEEKDAYS,
     MUSIC_LABELS,
     VIBE_LABELS,
