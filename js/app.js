@@ -322,6 +322,8 @@
     renderLineup();
     renderUpdatedBadge();
     document.getElementById("savedCount").textContent = state.saved.size;
+    // Let the viz layer re-plan too — the day strip retargets the map's night
+    document.dispatchEvent(new CustomEvent("six:render"));
   }
 
   /* ---------- wiring ---------- */
@@ -351,6 +353,25 @@
       p.classList.toggle("active", p.id === "panel-" + state.tab)
     );
     document.getElementById("main").scrollIntoView({ behavior: "smooth", block: "start" });
+  });
+
+  // Radar district node → Nightlife tab, filtered to that neighbourhood
+  document.addEventListener("click", (e) => {
+    const jump = e.target.closest("[data-hood-jump]");
+    if (!jump) return;
+    const hood = jump.dataset.hoodJump;
+    const chip = document.querySelector(`#hoodFilter [data-hood="${hood}"]`);
+    if (chip) chip.click();
+    const navBtn = nav.querySelector('.navlink[data-tab="nightlife"]');
+    if (navBtn) navBtn.click();
+  });
+
+  // Any element carrying data-tab outside the nav (e.g. the side-quest link)
+  document.addEventListener("click", (e) => {
+    const jump = e.target.closest("[data-tab]");
+    if (!jump || jump.closest("#topnav")) return;
+    const target = nav.querySelector(`.navlink[data-tab="${jump.dataset.tab}"]`);
+    if (target) target.click();
   });
 
   document.getElementById("logo").addEventListener("click", (e) => {

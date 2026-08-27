@@ -9,7 +9,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Archivo:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="css/styles.css?v=5" />
+  <link rel="stylesheet" href="css/styles.css?v=6" />
 </head>
 <body>
 
@@ -23,9 +23,9 @@
       </div>
       <nav class="topnav" id="topnav">
         <button class="navlink active" data-tab="pulse">Pulse</button>
-        <button class="navlink" data-tab="sports">Sports</button>
-        <button class="navlink" data-tab="concerts">Concerts</button>
         <button class="navlink" data-tab="nightlife">Nightlife</button>
+        <button class="navlink" data-tab="concerts">Concerts</button>
+        <button class="navlink navlink-quest" data-tab="sports">Sports <span class="quest-tag">side quest</span></button>
         <button class="navlink navlink-saved" data-tab="lineup">My Lineup <span class="saved-count" id="savedCount">0</span></button>
       </nav>
     </div>
@@ -34,10 +34,11 @@
   <section class="hero">
     <div class="wrap">
       <p class="hero-kicker">Toronto · Weekday Edition</p>
-      <h1 class="hero-title">The week is not<br /><span class="grad">just for waiting.</span></h1>
+      <h1 class="hero-title">Where are we<br /><span class="grad">going tonight?</span></h1>
       <p class="hero-sub">
-        Cheap seats at the Jays and Raptors. Hip-hop, R&amp;B and reggae shows.
-        The right rooms on King West, Ossington and Yorkville — Monday to Thursday, when covers drop and the get-in price is a joke.
+        Every room downtown that actually plays hip-hop, R&amp;B and reggae — King West, Ossington, Yorkville —
+        with the nights they go and what you'll pay at the door. Shows when the touring acts hit town.
+        And if you want a game first, that's the side quest.
       </p>
       <p class="updated-badge" id="updatedBadge">Refreshed nightly</p>
 
@@ -60,19 +61,19 @@
     <!-- ===== PULSE (dashboard) ===== -->
     <section class="tab-panel active" id="panel-pulse">
       <div class="panel-head">
-        <h2>📊 The Pulse</h2>
-        <p>Your next two weeks in one view. Click anything — dots, bars, pins — to open it.</p>
+        <h2>🌃 The Pulse</h2>
+        <p>The night, mapped. Pick a night up in the day strip and the map re-plans around it — click any room to open it.</p>
       </div>
 
       <div class="stat-row" id="statRow"></div>
 
-      <div class="viz-card hud-card">
+      <div class="viz-card hud-card hud-hero">
         <div class="viz-head">
-          <h3 class="hud-title"><span class="hud-status-dot"></span>PULSE.NET <span class="hud-title-dim">// next 14 nights</span></h3>
-          <div class="viz-legend" id="timelineLegend"></div>
+          <h3 class="hud-title"><span class="hud-status-dot"></span>CITY.MAP <span class="hud-title-dim">// where the music lives</span></h3>
+          <div class="viz-legend" id="mapLegend"></div>
         </div>
-        <div id="pulseNet"></div>
-        <p class="viz-note">Distance from centre = how soon (rings at +1, +3, +7, +14 nights). Sectors group sports / concerts / nightlife; venues sit at their next open night. Click any node to open it.</p>
+        <div id="mapViz"></div>
+        <p class="viz-note">Districts sit roughly where they do in the city. Each hub counts the rooms open on your chosen night; glowing pins are open, with their music and cover on the label, and the dashed line is the walk between them. Dimmed pins are dark that night.</p>
       </div>
 
       <div class="viz-card hud-card">
@@ -84,19 +85,27 @@
 
       <div class="viz-card hud-card">
         <div class="viz-head">
-          <h3 class="hud-title"><span class="hud-status-dot"></span>CITY.MAP <span class="hud-title-dim">// where the music lives</span></h3>
-          <div class="viz-legend" id="mapLegend"></div>
+          <h3 class="hud-title"><span class="hud-status-dot"></span>PULSE.NET <span class="hud-title-dim">// next 14 nights</span></h3>
+          <div class="viz-legend" id="timelineLegend"></div>
         </div>
-        <div id="mapViz"></div>
-        <p class="viz-note">Districts sit roughly where they do in the city; each hub shows how many rooms it holds, with venues on the ring around it. Pulsing nodes are open tonight. Click any venue to open it.</p>
+        <div id="pulseNet"></div>
+        <p class="viz-note">Distance from centre = how soon (rings at +1, +3, +7, +14 nights). Nightlife takes the widest arc, concerts next, sports the slim wedge. Click any node to open it.</p>
+      </div>
+
+      <div class="viz-card quest-card">
+        <div class="viz-head">
+          <h3 class="hud-title quest-head">◇ SIDE QUEST <span class="hud-title-dim">// cheap seats, if you want a game first</span></h3>
+          <button class="quest-more" data-tab="sports">All games →</button>
+        </div>
+        <div class="quest-strip" id="sportsStrip"></div>
       </div>
     </section>
 
     <!-- ===== SPORTS ===== -->
     <section class="tab-panel" id="panel-sports">
       <div class="panel-head">
-        <h2>🏟 Cheap seats, big nights</h2>
-        <p>Weekday games are the arbitrage: same teams, same building, a fraction of the weekend price. Prices shown are typical get-in estimates — tap a ticket link for live prices.</p>
+        <h2>◇ Side quest: cheap seats</h2>
+        <p>Not the main event — but a $13 Jays ticket is a great opening act, and Rogers Centre is a five-minute walk from King West. Prices are typical get-in estimates; tap a ticket link for live prices.</p>
       </div>
 
       <div class="filter-row">
@@ -169,7 +178,7 @@
     <!-- ===== NIGHTLIFE ===== -->
     <section class="tab-panel" id="panel-nightlife">
       <div class="panel-head">
-        <h2>🌃 Clubs &amp; bars that play the right music</h2>
+        <h2>🌃 The main event — rooms that play the right music</h2>
         <p>Rooms downtown where the DJ actually plays hip-hop, R&amp;B, dancehall and afrobeats — filtered by neighbourhood and the nights they actually go. Weeknights = short lines, low or no cover. Check Instagram day-of; programming changes weekly.</p>
       </div>
 
@@ -235,7 +244,7 @@
 
   <div class="viz-tooltip hidden" id="vizTooltip"></div>
 
-  <script src="js/app.js?v=5"></script>
-  <script src="js/viz.js?v=5"></script>
+  <script src="js/app.js?v=6"></script>
+  <script src="js/viz.js?v=6"></script>
 </body>
 </html>

@@ -59,21 +59,20 @@
     const weekISO = week.toLocaleDateString("en-CA", { timeZone: "America/Toronto" });
     const all = state.data.sports.concat(state.data.concerts);
     const thisWeek = all.filter((e) => e.date >= today && e.date <= weekISO);
-    const cheapest = thisWeek.slice().sort((a, b) => a.price - b.price)[0];
     const tonight = state.data.nightlife.filter((v) => v.nights.includes(todayDayName()));
     const freeTonight = tonight.filter((v) => v.coverMin === 0);
 
+    const shows = state.data.concerts.filter((e) => e.date >= today && e.date <= weekISO);
+    const games = state.data.sports.filter((e) => e.date >= today && e.date <= weekISO);
     const tiles = [
-      { big: String(thisWeek.length), label: "games & shows in the next 7 days" },
-      cheapest
-        ? { big: `$${cheapest.price}`, label: `cheapest night out: ${cheapest.title}`, open: cheapest.id }
-        : { big: "—", label: "no priced events this week" },
-      { big: String(tonight.length), label: `rooms going tonight (${todayDayName()})` },
-      { big: String(freeTonight.length), label: "of them with free cover" },
+      { big: String(tonight.length), label: `rooms open tonight (${todayDayName()})`, hero: true },
+      { big: String(freeTonight.length), label: "of them with no cover" },
+      { big: String(shows.length), label: "hip-hop / R&B / reggae shows this week" },
+      { big: String(games.length), label: "games this week · side quest", quiet: true },
     ];
     document.getElementById("statRow").innerHTML = tiles
       .map((t) => `
-        <div class="stat-tile ${t.open ? "clickable" : ""}" ${t.open ? `data-open="${esc(t.open)}" role="button" tabindex="0"` : ""}>
+        <div class="stat-tile ${t.hero ? "hero" : ""} ${t.quiet ? "quiet" : ""} ${t.open ? "clickable" : ""}" ${t.open ? `data-open="${esc(t.open)}" role="button" tabindex="0"` : ""}>
           <span class="stat-big">${esc(t.big)}</span>
           <span class="stat-label">${esc(t.label)}</span>
         </div>`)
@@ -92,7 +91,7 @@
     const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
     const W = 1000, H = 745, CX = W / 2, CY = H / 2;
-    const R0 = 64, R1 = 308;
+    const R0 = 126, R1 = 330;   // inner radius must clear the hub collar and give day-0 nodes arc room
     const rOf = (day) => R0 + (R1 - R0) * Math.sqrt(Math.min(day, 14) / 14);
     // compass angle: 0 = north, clockwise
     const pos = (deg, r) => {
@@ -125,19 +124,36 @@
       const d = daysUntil(e.date);
       if (d >= 0 && d <= 14) nodes.push({ kind: "concerts", day: d, item: e });
     });
-    state.data.nightlife.forEach((v) => {
-      const d = nextOpenIn(v.nights);
-      if (d !== null) nodes.push({ kind: "lounge", vibe: v.vibe, day: d, item: v, venue: true });
+    // Venues recur weekly rather than having a date, so 15 of them all land on
+    // the day-0 ring and fuse. The map above already answers "which room, which
+    // night" — here nightlife reads at district level: one node per hood, sized
+    // by how many rooms are open, clicking through to that neighbourhood.
+    const HOODS = [
+      { key: "kingwest", label: "KING W" },
+      { key: "ent", label: "ENT DIST" },
+      { key: "queenwest", label: "QUEEN W" },
+      { key: "ossington", label: "OSSINGTON" },
+      { key: "yorkville", label: "YORKVILLE" },
+    ];
+    HOODS.forEach((h) => {
+      const list = state.data.nightlife.filter((v) => v.hood === h.key);
+      if (!list.length) return;
+      const days = list.map((v) => nextOpenIn(v.nights)).filter((d) => d !== null);
+      if (!days.length) return;
+      const day = Math.min(...days);
+      const openThatNight = list.filter((v) => nextOpenIn(v.nights) === day).length;
+      nodes.push({ kind: "lounge", day, district: h, count: openThatNight, total: list.length });
     });
 
-    // sectors: [startDeg, endDeg]
+    // Sector width follows priority, not equal thirds: nightlife is the app's
+    // centre of gravity, concerts second, sports a slim side-quest wedge.
     const SECTORS = {
-      sports: [244, 356],
-      concerts: [4, 116],
-      lounge: [124, 236],
+      lounge: [186, 354],   // 168deg
+      concerts: [8, 128],   // 120deg
+      sports: [136, 178],   // 42deg
     };
-    ["sports", "concerts", "lounge"].forEach((k) => {
-      const group = nodes.filter((n) => n.kind === k).sort((a, b) => a.day - b.day || String(a.item.id).localeCompare(b.item.id));
+    ["lounge", "concerts", "sports"].forEach((k) => {
+      const group = nodes.filter((n) => n.kind === k).sort((a, b) => a.day - b.day || String(a.item ? a.item.id : a.district.key).localeCompare(b.item ? b.item.id : b.district.key));
       const [s, e] = SECTORS[k];
       group.forEach((n, i) => {
         n.angle = s + ((i + 0.5) / group.length) * (e - s);
@@ -146,7 +162,7 @@
     });
 
     let cheapest = null;
-    nodes.forEach((n) => { if (!n.venue && (!cheapest || n.item.price < cheapest.item.price)) cheapest = n; });
+    nodes.forEach((n) => { if (n.item && n.item.price != null && (!cheapest || n.item.price < cheapest.item.price)) cheapest = n; });
 
     const rings = [1, 3, 7, 14].map((d) => `
       <circle cx="${CX}" cy="${CY}" r="${rOf(d)}" fill="none" stroke="${d === 14 ? C.ringBright : C.ring}" stroke-width="${d === 14 ? 1.5 : 1}" ${d === 14 ? "" : 'stroke-dasharray="1 6"'} stroke-linecap="round" />
@@ -172,7 +188,7 @@
       arcFor(SECTORS.concerts[0], SECTORS.concerts[1], C.concerts) +
       arcFor(SECTORS.lounge[0], SECTORS.lounge[1], C.lounge);
 
-    const spokes = [0, 120, 240].map((deg) => {
+    const spokes = [0, 132, 182].map((deg) => {
       const [x1, y1] = pos(deg, R0 - 12);
       const [x2, y2] = pos(deg, R1 + 8);
       return `<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="${C.ring}" stroke-width="1" stroke-dasharray="2 8" />`;
@@ -194,9 +210,9 @@
       return `<text x="${x}" y="${y}" text-anchor="middle" fill="${color}" font-size="14" font-weight="800" letter-spacing="5" font-family="Archivo, sans-serif" filter="url(#textGlow)">${text}</text>`;
     };
     const labels =
-      sectorLabel(300, R1 + 44, "SPORTS", C.sportsGlow) +
-      sectorLabel(60, R1 + 44, "CONCERTS", C.concertsGlow) +
-      sectorLabel(180, R1 + 50, "NIGHTLIFE", C.loungeGlow);
+      sectorLabel(270, R1 + 46, "NIGHTLIFE", C.loungeGlow) +
+      sectorLabel(68, R1 + 44, "CONCERTS", C.concertsGlow) +
+      sectorLabel(157, R1 + 44, "SPORTS", C.sportsGlow);
 
     const sweep = reduceMotion ? "" : `
       <path d="M ${CX} ${CY} L ${pos(0, R1)} A ${R1} ${R1} 0 0 1 ${pos(40, R1)} Z" fill="url(#sweepGrad)" opacity="0.8">
@@ -208,12 +224,26 @@
 
     const nodeMarkup = nodes.map((n, i) => {
       const [x, y] = pos(n.angle, n.r);
-      const color = n.venue ? C.lounge : C[n.kind]; // venues read as one teal family here; vibe detail lives on the map
-      const it = n.item;
+      const color = C[n.kind];
       const when = n.day === 0 ? "tonight" : n.day === 1 ? "tomorrow" : `in ${n.day} nights`;
-      const tip = n.venue
-        ? `<strong>${esc(it.name)}</strong><br>${esc(it.hoodLabel)} · next open <strong>${esc(when)}</strong><br>${esc(it.cover)} · click to open`
-        : `<strong>${esc(it.title)}</strong><br>${esc(fmtDate(it.date))} (${esc(when)}) · ${esc(it.venue)}<br>est. from <strong>$${it.price}</strong> · click to open`;
+
+      if (n.district) {
+        const r = 7 + Math.min(n.count, 6);
+        const tip = `<strong>${esc(n.district.label)}</strong><br><strong>${n.count}</strong> room${n.count === 1 ? "" : "s"} open ${esc(when)} · ${n.total} total<br>click for this neighbourhood`;
+        const ping = reduceMotion ? "" : `
+          <circle cx="${x}" cy="${y}" r="${r}" fill="none" stroke="${color}" stroke-width="1.5" opacity="0">
+            <animate attributeName="r" values="${r};${r + 18}" dur="3s" begin="${i * 0.3}s" repeatCount="indefinite" />
+            <animate attributeName="opacity" values="0.7;0" dur="3s" begin="${i * 0.3}s" repeatCount="indefinite" />
+          </circle>`;
+        return `<line x1="${CX}" y1="${CY}" x2="${x}" y2="${y}" stroke="${color}" stroke-width="1" opacity="0.28" pointer-events="none" />${ping}
+          <circle cx="${x}" cy="${y}" r="${r}" fill="${color}" stroke="${C.surface}" stroke-width="2.5" filter="url(#nodeGlow)" pointer-events="none" />
+          <text x="${x}" y="${y + 4}" text-anchor="middle" fill="${C.surface}" font-size="11" font-weight="800" font-family="Archivo, sans-serif" pointer-events="none">${n.count}</text>
+          <text x="${x}" y="${y + r + 15}" text-anchor="middle" fill="${C.inkLabel}" font-size="10" letter-spacing="1.2" font-family="JetBrains Mono, monospace" paint-order="stroke" stroke="${C.surface}" stroke-width="3" pointer-events="none">${esc(n.district.label)}</text>
+          <circle cx="${x}" cy="${y}" r="${r + 8}" fill="transparent" style="cursor:pointer" data-hood-jump="${esc(n.district.key)}" data-tip="${esc(tip)}" />`;
+      }
+
+      const it = n.item;
+      const tip = `<strong>${esc(it.title)}</strong><br>${esc(fmtDate(it.date))} (${esc(when)}) · ${esc(it.venue)}<br>est. from <strong>$${it.price}</strong> · click to open`;
       const ping = reduceMotion ? "" : `
         <circle cx="${x}" cy="${y}" r="6" fill="none" stroke="${color}" stroke-width="1.5" opacity="0" pointer-events="none">
           <animate attributeName="r" values="6;22" dur="3s" begin="${(i % 6) * 0.5}s" repeatCount="indefinite" />
@@ -254,7 +284,7 @@
 
     el.innerHTML = `
       <svg viewBox="0 0 ${W} ${H}" style="width:100%;height:auto;display:block" role="img"
-           aria-label="Radar view of the next 14 nights: sports, concerts and nightlife nodes placed by how soon they happen. Each node is clickable.">
+           aria-label="Radar view of the next 14 nights: shows and games placed by how soon they happen, plus a node per nightlife district. Each node is clickable.">
         <defs>
           <filter id="nodeGlow" x="-80%" y="-80%" width="260%" height="260%">
             <feGaussianBlur stdDeviation="3" result="b" />
@@ -320,12 +350,12 @@
       : `<p class="empty-note">Quiet one tonight (${esc(dayName)}) — check the timeline for what's next.</p>`;
   }
 
-  /* ---------- CITY.MAP: district constellation ----------
-     Real lat/lng puts six King West rooms inside one city block, which no
-     amount of nudging makes readable. So districts keep their relative
-     geography (Yorkville north, Ossington west, King West south-central…)
-     while each district's venues sit on an evenly-spaced ring around its hub —
-     spacing is structural, not luck. Street corridors link the hubs. */
+  /* ---------- CITY.MAP: the night, mapped ----------
+     The app's centre of gravity. Districts hold their relative city positions;
+     each district's venues sit on evenly-spaced ring slots so nothing crowds.
+     Nodes answer the only question that matters at 9pm: who's open, what do
+     they play, what's the cover. Colour = room type (3 validated hues);
+     genre and cover ride as text, which carries more than colour could. */
 
   function renderMap(S) {
     if (!document.getElementById("mapViz")) return;
@@ -333,29 +363,29 @@
     const el = document.getElementById("mapViz");
     const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-    const W = 1000, H = 660;
+    const DAY_SEQ = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
+    // The map follows the day strip: pick a night up top and the map re-plans.
+    const targetNight = DAY_SEQ.includes(state.day) ? state.day : todayDayName();
+    const isTonight = targetNight === todayDayName();
+
+    const W = 1000, H = 690;
     const pos = (deg, r, cx, cy) => {
       const a = (deg * Math.PI) / 180;
       return [cx + r * Math.sin(a), cy - r * Math.cos(a)];
     };
 
-    // Hub placement mirrors the city: Yorkville north, Ossington/Dundas west,
-    // Queen West between, King West south-central, Ent. District east of it.
     const DISTRICTS = [
-      { key: "yorkville", label: "YORKVILLE", x: 792, y: 118, start: 30 },
-      { key: "ossington", label: "OSSINGTON / DUNDAS W", x: 214, y: 268, start: 200 },
-      { key: "queenwest", label: "QUEEN WEST", x: 452, y: 176, start: 150 },
-      { key: "kingwest", label: "KING WEST", x: 468, y: 452, start: 96 },
-      { key: "ent", label: "ENT. DISTRICT", x: 838, y: 398, start: 165 },
+      { key: "yorkville", label: "YORKVILLE", x: 800, y: 124, start: 30 },
+      { key: "ossington", label: "OSSINGTON / DUNDAS W", x: 216, y: 276, start: 200 },
+      { key: "queenwest", label: "QUEEN WEST", x: 456, y: 180, start: 150 },
+      { key: "kingwest", label: "KING WEST", x: 470, y: 468, start: 96 },
+      { key: "ent", label: "ENT. DISTRICT", x: 846, y: 410, start: 165 },
     ];
     const hubOf = {};
     DISTRICTS.forEach((d) => { hubOf[d.key] = d; });
 
-    const today = todayDayName();
-
-    // Street corridors between hubs — the city grid, abstracted
     const CORRIDORS = [
-      { a: "ossington", b: "queenwest", label: "" }, // district name already reads "Dundas W"
+      { a: "ossington", b: "queenwest", label: "" },
       { a: "queenwest", b: "kingwest", label: "" },
       { a: "kingwest", b: "ent", label: "KING ST W" },
       { a: "queenwest", b: "yorkville", label: "AVENUE RD" },
@@ -369,96 +399,120 @@
       const ang = (Math.atan2(B.y - A.y, B.x - A.x) * 180) / Math.PI;
       const flip = ang > 90 || ang < -90;
       const spark = reduceMotion ? "" : `
-        <circle r="2.8" fill="${C.loungeGlow}" opacity="0.9" filter="url(#pinGlow)">
-          <animateMotion dur="${7 + i * 2}s" repeatCount="indefinite"
-            path="M ${A.x} ${A.y} L ${B.x} ${B.y}" />
+        <circle r="2.8" fill="${C.loungeGlow}" opacity="0.85" filter="url(#pinGlow)">
+          <animateMotion dur="${8 + i * 2}s" repeatCount="indefinite" path="M ${A.x} ${A.y} L ${B.x} ${B.y}" />
         </circle>`;
       const label = c.label ? `
         <text x="${mx}" y="${my - 7}" text-anchor="middle" fill="${C.inkLabel}" font-size="10.5"
-              letter-spacing="1.5" font-family="JetBrains Mono, monospace" opacity="0.75"
+              letter-spacing="1.5" font-family="JetBrains Mono, monospace" opacity="0.7"
               transform="rotate(${flip ? ang + 180 : ang} ${mx} ${my})"
               paint-order="stroke" stroke="${C.surface}" stroke-width="3">${esc(c.label)}</text>` : "";
       return `<line x1="${A.x}" y1="${A.y}" x2="${B.x}" y2="${B.y}" stroke="${C.street}"
-                 stroke-width="1.6" stroke-dasharray="3 7" opacity="0.8" />${spark}${label}`;
+                 stroke-width="1.6" stroke-dasharray="3 7" opacity="0.75" />${spark}${label}`;
     }).join("");
 
-    // Venues onto evenly-spaced ring slots around their district hub
     const nodes = [];
     DISTRICTS.forEach((d) => {
       const list = state.data.nightlife.filter((v) => v.hood === d.key);
-      d.count = list.length;
-      const ringR = list.length <= 1 ? 66 : 62 + list.length * 8;
+      d.total = list.length;
+      const ringR = list.length <= 1 ? 70 : 66 + list.length * 8;
       d.ringR = ringR;
       list.forEach((v, i) => {
         const angle = d.start + (i * 360) / list.length;
         const [x, y] = pos(angle, ringR, d.x, d.y);
-        nodes.push({ v, x, y, angle, hub: d, open: v.nights.includes(today) });
+        nodes.push({ v, x, y, angle, hub: d, open: v.nights.includes(targetNight) });
       });
+      d.open = list.filter((v) => v.nights.includes(targetNight)).length;
     });
 
-    const ringMarkup = DISTRICTS.filter((d) => d.count > 1).map((d) => `
+    const ringMarkup = DISTRICTS.filter((d) => d.total > 1).map((d) => `
       <circle cx="${d.x}" cy="${d.y}" r="${d.ringR}" fill="none" stroke="${C.ring}"
               stroke-width="1" stroke-dasharray="1 7" stroke-linecap="round" />`).join("");
 
+    // Crawl routes: the walk between rooms open the same night, district by district
+    const crawls = DISTRICTS.map((d) => {
+      const open = nodes.filter((n) => n.hub.key === d.key && n.open).sort((a, b) => a.angle - b.angle);
+      if (open.length < 2) return "";
+      const path = open.map((n, i) => `${i ? "L" : "M"} ${n.x.toFixed(1)} ${n.y.toFixed(1)}`).join(" ");
+      const dash = reduceMotion ? "" : `
+        <animate attributeName="stroke-dashoffset" from="24" to="0" dur="1.4s" repeatCount="indefinite" />`;
+      return `<path d="${path}" fill="none" stroke="${C.loungeGlow}" stroke-width="1.6" opacity="0.4"
+                 stroke-dasharray="7 5" stroke-linecap="round" stroke-linejoin="round">${dash}</path>`;
+    }).join("");
+
     const spokes = nodes.map((n) => `
       <line x1="${n.hub.x}" y1="${n.hub.y}" x2="${n.x}" y2="${n.y}"
-            stroke="${C[n.v.vibe]}" stroke-width="1" opacity="0.3" />`).join("");
+            stroke="${C[n.v.vibe]}" stroke-width="1" opacity="${n.open ? 0.32 : 0.12}" />`).join("");
 
     const hubMarkup = DISTRICTS.map((d, i) => {
       const spin = reduceMotion ? "" : `
-        <circle cx="${d.x}" cy="${d.y}" r="33" fill="none" stroke="${C.ringBright}" stroke-width="1.1"
-                stroke-dasharray="8 13" stroke-linecap="round">
+        <circle cx="${d.x}" cy="${d.y}" r="34" fill="none" stroke="${d.open ? C.loungeGlow : C.ringBright}"
+                stroke-width="1.1" stroke-dasharray="8 13" stroke-linecap="round" opacity="${d.open ? 0.8 : 0.4}">
           <animateTransform attributeName="transform" type="rotate"
             from="0 ${d.x} ${d.y}" to="${i % 2 ? "-360" : "360"} ${d.x} ${d.y}"
             dur="${26 + i * 4}s" repeatCount="indefinite" />
         </circle>`;
       return `${spin}
-        <circle cx="${d.x}" cy="${d.y}" r="24" fill="${C.surface}" stroke="${C.ringBright}" stroke-width="1.5" />
-        <text x="${d.x}" y="${d.y + 6}" text-anchor="middle" fill="${C.inkStrong}" font-size="16"
-              font-weight="800" font-family="Archivo, sans-serif">${d.count}</text>
-        <text x="${d.x}" y="${d.y - 42}" text-anchor="middle" fill="${C.sportsGlow}" font-size="12"
+        <circle cx="${d.x}" cy="${d.y}" r="25" fill="${C.surface}"
+                stroke="${d.open ? C.loungeGlow : C.ringBright}" stroke-width="1.6" />
+        <text x="${d.x}" y="${d.y + 2}" text-anchor="middle" fill="${d.open ? C.inkStrong : C.inkFaint}"
+              font-size="17" font-weight="800" font-family="Archivo, sans-serif">${d.open}</text>
+        <text x="${d.x}" y="${d.y + 15}" text-anchor="middle" fill="${C.inkFaint}" font-size="8.5"
+              letter-spacing="1" font-family="JetBrains Mono, monospace">OPEN</text>
+        <text x="${d.x}" y="${d.y - 44}" text-anchor="middle" fill="${C.sportsGlow}" font-size="12"
               font-weight="800" letter-spacing="3" font-family="Archivo, sans-serif"
               filter="url(#textGlowMap)">${esc(d.label)}</text>`;
     }).join("");
 
+    const genreOf = (v) => (v.music || []).slice(0, 2).map((m) => MUSIC_LABELS[m] || m).join(" / ");
+    const coverOf = (v) => (v.coverMin === 0 ? "FREE" : "$" + v.coverMin + "+");
+
     const nodeMarkup = nodes.map((n, i) => {
       const v = n.v;
       const color = C[v.vibe];
-      const tip = `<strong>${esc(v.name)}</strong><br>${esc(v.hoodLabel)} · ${esc(VIBE_LABELS[v.vibe] || v.vibe)}<br>${esc(v.music.map((m) => MUSIC_LABELS[m] || m).join(" · "))}<br>${esc(v.cover)}${n.open ? " · <strong>open tonight</strong>" : ""} · click to open`;
+      const tip = `<strong>${esc(v.name)}</strong><br>${esc(v.hoodLabel)} · ${esc(VIBE_LABELS[v.vibe] || v.vibe)}<br>${esc(genreOf(v))}<br>${esc(v.cover)}<br>${n.open ? `<strong>Open ${esc(targetNight)}</strong>` : `Closed ${esc(targetNight)} · goes ${esc(v.nights.join(", "))}`} · click to open`;
 
-      // Label reads outward from the hub; flip near a canvas edge so it never clips
       let anchor = Math.sin((n.angle * Math.PI) / 180) >= 0 ? "start" : "end";
-      let lx = n.x + (anchor === "start" ? 14 : -14);
-      if (anchor === "end" && lx < 118) { anchor = "start"; lx = n.x + 14; }
-      if (anchor === "start" && lx > W - 118) { anchor = "end"; lx = n.x - 14; }
+      let lx = n.x + (anchor === "start" ? 15 : -15);
+      if (anchor === "end" && lx < 130) { anchor = "start"; lx = n.x + 15; }
+      if (anchor === "start" && lx > W - 130) { anchor = "end"; lx = n.x - 15; }
 
       const ping = n.open && !reduceMotion ? `
-        <circle cx="${n.x}" cy="${n.y}" r="8" fill="none" stroke="${color}" stroke-width="1.5" opacity="0">
-          <animate attributeName="r" values="8;26" dur="2.8s" begin="${(i % 5) * 0.45}s" repeatCount="indefinite" />
-          <animate attributeName="opacity" values="0.75;0" dur="2.8s" begin="${(i % 5) * 0.45}s" repeatCount="indefinite" />
+        <circle cx="${n.x}" cy="${n.y}" r="9" fill="none" stroke="${color}" stroke-width="1.5" opacity="0">
+          <animate attributeName="r" values="9;28" dur="2.8s" begin="${(i % 5) * 0.45}s" repeatCount="indefinite" />
+          <animate attributeName="opacity" values="0.7;0" dur="2.8s" begin="${(i % 5) * 0.45}s" repeatCount="indefinite" />
         </circle>` : "";
 
+      const sub = n.open ? `
+        <text x="${lx}" y="${n.y + 16}" text-anchor="${anchor}" fill="${C.inkLabel}" font-size="10"
+              letter-spacing="0.5" font-family="JetBrains Mono, monospace" paint-order="stroke"
+              stroke="${C.surface}" stroke-width="3.5" pointer-events="none">${esc(genreOf(v))} · ${esc(coverOf(v))}</text>` : "";
+
       return `${ping}
-        <circle cx="${n.x}" cy="${n.y}" r="8" fill="${color}" stroke="${C.surface}" stroke-width="2.5"
-                filter="url(#pinGlow)" pointer-events="none" />
-        ${n.open ? `<circle cx="${n.x}" cy="${n.y}" r="3" fill="${C.surface}" pointer-events="none" />` : ""}
-        <text x="${lx}" y="${n.y + 4}" text-anchor="${anchor}" fill="${C.inkStrong}" font-size="11.5"
-              font-weight="700" font-family="Archivo, sans-serif" paint-order="stroke"
-              stroke="${C.surface}" stroke-width="3.5" pointer-events="none">${esc(v.name)}</text>
-        <circle cx="${n.x}" cy="${n.y}" r="15" fill="transparent" style="cursor:pointer"
+        <circle cx="${n.x}" cy="${n.y}" r="${n.open ? 9 : 6}" fill="${color}" stroke="${C.surface}"
+                stroke-width="2.5" opacity="${n.open ? 1 : 0.4}"
+                ${n.open ? 'filter="url(#pinGlow)"' : ""} pointer-events="none" />
+        ${n.open ? `<circle cx="${n.x}" cy="${n.y}" r="3.2" fill="${C.surface}" pointer-events="none" />` : ""}
+        <text x="${lx}" y="${n.y + 4}" text-anchor="${anchor}" fill="${n.open ? C.inkStrong : C.inkFaint}"
+              font-size="${n.open ? 12 : 11}" font-weight="700" font-family="Archivo, sans-serif"
+              paint-order="stroke" stroke="${C.surface}" stroke-width="3.5"
+              opacity="${n.open ? 1 : 0.72}" pointer-events="none">${esc(v.name)}</text>
+        ${sub}
+        <circle cx="${n.x}" cy="${n.y}" r="16" fill="transparent" style="cursor:pointer"
                 data-open="${esc(v.id)}" data-tip="${esc(tip)}" />`;
     }).join("");
 
     const openCount = nodes.filter((n) => n.open).length;
+    const freeCount = nodes.filter((n) => n.open && n.v.coverMin === 0).length;
     const readout = `
-      <text x="20" y="${H - 16}" fill="${C.inkLabel}" font-size="11" letter-spacing="1.5"
-            font-family="JetBrains Mono, monospace">VENUES:${nodes.length} // DISTRICTS:${DISTRICTS.length} // OPEN TONIGHT:${openCount}</text>
+      <text x="20" y="${H - 16}" fill="${C.loungeGlow}" font-size="11.5" letter-spacing="1.5"
+            font-family="JetBrains Mono, monospace">▶ ${esc(targetNight.toUpperCase())}${isTonight ? " (TONIGHT)" : ""} // ${openCount} ROOMS OPEN // ${freeCount} NO COVER</text>
       <text x="${W - 20}" y="${H - 16}" text-anchor="end" fill="${C.inkFaint}" font-size="11"
-            letter-spacing="1.5" font-family="JetBrains Mono, monospace">${esc(today.toUpperCase())} // CITY.MAP</text>`;
+            letter-spacing="1.5" font-family="JetBrains Mono, monospace">CITY.MAP</text>`;
 
     el.innerHTML = `
       <svg viewBox="0 0 ${W} ${H}" style="width:100%;height:auto;display:block" role="img"
-           aria-label="Constellation map of Toronto nightlife districts; each district hub shows its venue count with venues arranged around it. Every venue is clickable.">
+           aria-label="Map of Toronto nightlife districts for ${esc(targetNight)}: ${openCount} rooms open, each showing its music and cover. Every venue is clickable.">
         <defs>
           <filter id="pinGlow" x="-80%" y="-80%" width="260%" height="260%">
             <feGaussianBlur stdDeviation="2.8" result="b" />
@@ -483,16 +537,41 @@
         <rect x="0" y="0" width="${W}" height="${H}" rx="12" fill="url(#mapBg)" />
         <rect x="0" y="0" width="${W}" height="${H}" rx="12" fill="url(#dotGrid)" />
         <rect x="0" y="${H - 52}" width="${W}" height="52" fill="url(#lakeGrad)" />
-        <text x="${W / 2}" y="${H - 34}" text-anchor="middle" fill="${C.loungeGlow}" opacity="0.75"
+        <text x="${W / 2}" y="${H - 34}" text-anchor="middle" fill="${C.loungeGlow}" opacity="0.7"
               font-size="11" letter-spacing="6" font-family="JetBrains Mono, monospace">≈ ≈ LAKE ONTARIO ≈ ≈</text>
-        ${corridorMarkup}${ringMarkup}${spokes}${nodeMarkup}${hubMarkup}${readout}
+        ${corridorMarkup}${ringMarkup}${crawls}${spokes}${nodeMarkup}${hubMarkup}${readout}
       </svg>`;
 
     document.getElementById("mapLegend").innerHTML = ["club", "barclub", "lounge"]
       .map((v) => `<span class="legend-item"><span class="legend-dot" style="background:${C[v]}"></span>${VIBE_LABELS[v]}</span>`)
-      .join("") + `<span class="legend-item"><span class="legend-ring"></span>Open tonight</span>`;
+      .join("") + `<span class="legend-item"><span class="legend-ring"></span>Closed ${esc(targetNight)}</span>`;
 
     bindTips(el);
+  }
+
+  /* ---------- sports: the side quest ----------
+     Deliberately compact — a single scannable strip, not a headline panel. */
+
+  function renderSportsStrip(S) {
+    if (!document.getElementById("sportsStrip")) return;
+    const { state, esc, fmtDate, dayOf, WEEKDAYS } = S;
+    const today = S.todayISO();
+    const next = state.data.sports
+      .filter((e) => e.date >= today)
+      .sort((a, b) => a.date.localeCompare(b.date))
+      .slice(0, 6);
+
+    document.getElementById("sportsStrip").innerHTML = next.length
+      ? next.map((e) => `
+          <div class="quest-chip clickable" data-open="${esc(e.id)}" role="button" tabindex="0"
+               data-tip="${esc(`<strong>${e.title}</strong><br>${fmtDate(e.date)} · ${e.venue}<br>est. from <strong>$${e.price}</strong>`)}">
+            <span class="quest-date">${esc(fmtDate(e.date))}${WEEKDAYS.includes(dayOf(e.date)) ? " ·" : ""}</span>
+            <span class="quest-title">${esc(e.title)}</span>
+            <span class="quest-price">$${e.price}</span>
+          </div>`).join("")
+      : `<p class="empty-note">No games on the board right now.</p>`;
+
+    bindTips(document.getElementById("sportsStrip"));
   }
 
   /* ---------- boot ---------- */
@@ -501,11 +580,12 @@
     const S = window.SIX;
     if (!S || !S.state.data) return;
     // Each panel renders independently — one failure must never blank the rest
-    [renderStats, renderPulseNet, renderTonight, renderMap].forEach((fn) => {
+    [renderStats, renderMap, renderTonight, renderPulseNet, renderSportsStrip].forEach((fn) => {
       try { fn(S); } catch (err) { console.error("viz panel failed:", fn.name, err); }
     });
   }
 
   document.addEventListener("six:data", renderAllViz);
+  document.addEventListener("six:render", renderAllViz);
   renderAllViz(); // in case data beat us to it
 })();
