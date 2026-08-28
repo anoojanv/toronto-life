@@ -26,6 +26,7 @@
     size: "all",
     hood: "all",
     vibe: "all",
+    mapView: "map",   // "map" | "list" — the user picks, we don't guess from width
     saved: loadSaved(),
     data: null,
   };
@@ -431,6 +432,16 @@
     e.preventDefault();
     window.scrollTo({ top: 0, behavior: "smooth" });
   });
+
+  const mapToggle = document.getElementById("mapToggle");
+  if (mapToggle) {
+    mapToggle.addEventListener("click", (e) => {
+      const btn = e.target.closest("[data-map-view]");
+      if (!btn || btn.dataset.mapView === state.mapView) return;
+      state.mapView = btn.dataset.mapView;
+      renderAll();
+    });
+  }
 
   const dayStrip = document.getElementById("dayStrip");
   dayStrip.addEventListener("click", (e) => {

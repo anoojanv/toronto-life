@@ -338,6 +338,11 @@
       </div>`).join("");
   }
 
+  function syncMapToggle(active) {
+    document.querySelectorAll("#mapToggle [data-map-view]").forEach((b) =>
+      b.classList.toggle("active", b.dataset.mapView === active));
+  }
+
   function renderMapList(S) {
     const { state, esc, MUSIC_LABELS, todayDayName } = S;
     const el = document.getElementById("mapViz");
@@ -387,6 +392,7 @@
       </p>
       <div class="zone-list">${zones}</div>`;
 
+    syncMapToggle("list");
     const legend = document.getElementById("mapLegend");
     if (legend) legend.innerHTML = "";
   }
@@ -403,9 +409,11 @@
     if (!document.getElementById("mapViz")) return;
     const { state, esc, VIBE_LABELS, MUSIC_LABELS, todayDayName } = S;
     const el = document.getElementById("mapViz");
-    // A 1000px-wide diagram scaled to a 360px phone renders 12px labels at ~4px.
-    // Narrow screens get the same data as a legible grouped list instead.
-    if (window.innerWidth < 760) return renderMapList(S);
+    // Phones keep the real map: the SVG renders at a fixed comfortable width
+    // inside a horizontally-scrollable frame, so labels stay at their true
+    // size and you pan the city the way you'd expect to pan a map. The list
+    // is still one tap away for anyone who prefers it.
+    if (S.state.mapView === "list") return renderMapList(S);
 
     const DAY_SEQ = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
     const FULL_DAY = { Mon: "Monday", Tue: "Tuesday", Wed: "Wednesday", Thu: "Thursday",
@@ -528,6 +536,8 @@
         <strong>${openTotal} rooms open ${isTonight ? "tonight" : FULL_DAY[night]}</strong>
         <span>${freeTotal} with no cover · tap a room, or a neighbourhood circle</span>
       </p>
+      <p class="map-swipe">Swipe the map sideways to see the whole city →</p>
+      <div class="map-scroll">
       <svg viewBox="0 0 ${W} ${H}" style="width:100%;height:auto;display:block" role="img"
            aria-label="Map of Toronto nightlife districts for ${esc(night)}: ${openTotal} rooms open. Each pin is a venue and opens its details.">
         <defs>
@@ -545,9 +555,23 @@
         <text x="${W / 2}" y="${H - 16}" text-anchor="middle" fill="${C.loungeGlow}" opacity="0.6"
               font-size="10.5" letter-spacing="5" font-family="JetBrains Mono, monospace">LAKE ONTARIO</text>
         ${corridorMarkup}${ringMarkup}${spokes}${nodeMarkup}${hubMarkup}
-      </svg>`;
+      </svg>
+      </div>`;
 
     bindTips(el);
+
+    syncMapToggle("map");
+
+    // On a phone the map is wider than the frame; open centred on downtown
+    // rather than at the empty western edge.
+    const frame = el.querySelector(".map-scroll");
+    if (frame) {
+      requestAnimationFrame(() => {
+        if (frame.scrollWidth > frame.clientWidth) {
+          frame.scrollLeft = Math.max(0, (frame.scrollWidth - frame.clientWidth) / 2);
+        }
+      });
+    }
 
     const legend = document.getElementById("mapLegend");
     if (legend) {
@@ -597,14 +621,5 @@
   document.addEventListener("six:data", renderAllViz);
   document.addEventListener("six:render", renderAllViz);
 
-  let resizeTimer = null;
-  let wasNarrow = window.innerWidth < 760;
-  window.addEventListener("resize", () => {
-    const nowNarrow = window.innerWidth < 760;
-    if (nowNarrow === wasNarrow) return;   // only swap when we cross the breakpoint
-    wasNarrow = nowNarrow;
-    clearTimeout(resizeTimer);
-    resizeTimer = setTimeout(renderAllViz, 150);
-  });
   renderAllViz(); // in case data beat us to it
 })();

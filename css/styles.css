@@ -696,6 +696,49 @@ a { color: inherit; }
 .zone-head-btn:hover .zone-name { color: #3fd6c8; }
 
 
+
+/* ---------- map/list toggle + mobile map panning ---------- */
+
+.map-head-right { display: flex; flex-direction: column; align-items: flex-end; gap: 8px; }
+
+.map-toggle {
+  display: inline-flex;
+  background: var(--bg-raised);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 2px;
+}
+.map-toggle button {
+  background: none;
+  border: none;
+  color: var(--text-dim);
+  font-size: 0.78rem;
+  font-weight: 700;
+  padding: 5px 14px;
+  border-radius: 999px;
+  transition: all 0.15s;
+}
+.map-toggle button:hover { color: var(--text); }
+.map-toggle button.active { background: #3fd6c8; color: #08201e; }
+
+.map-swipe { display: none; }
+
+/* The map keeps a comfortable render width and pans, instead of shrinking its
+   labels into illegibility on a phone. */
+@media (max-width: 760px) {
+  .map-head-right { align-items: flex-start; width: 100%; }
+  .map-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  .map-scroll svg { min-width: 820px; }
+  .map-swipe {
+    display: block;
+    font-size: 0.75rem;
+    color: var(--text-faint);
+    margin-bottom: 8px;
+  }
+  /* the list view must not inherit the scroll frame */
+  #mapViz .zone-list { min-width: 0; }
+}
+
 /* ---------- neighbourhood popup ---------- */
 
 .modal-back {
