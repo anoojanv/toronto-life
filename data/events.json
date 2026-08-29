@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-08-28T20:10:44.946Z",
+  "lastUpdated": "2026-08-29T13:48:31.935Z",
   "source": "curated",
   "sports": [
     {
@@ -608,29 +608,6 @@
     }
   ],
   "concerts": [
-    {
-      "id": "c-firstclass1",
-      "genres": [
-        "hiphop"
-      ],
-      "size": "mid",
-      "date": "2026-08-28",
-      "title": "First Class Fest — Day 1 (Osamason, Lancey Foux)",
-      "venue": "The Bowl, Sobeys Stadium",
-      "price": 65,
-      "desc": "Underground rap festival takeover — the rage-rap end of the spectrum, all night.",
-      "links": [
-        {
-          "label": "Tickets",
-          "url": "https://www.ticketmaster.ca/search?q=First%20Class%20Fest",
-          "primary": true
-        },
-        {
-          "label": "SeatGeek",
-          "url": "https://seatgeek.com/search?search=First%20Class%20Fest%20Toronto"
-        }
-      ]
-    },
     {
       "id": "c-firstclass2",
       "genres": [
