@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-08-30T13:46:52.396Z",
+  "lastUpdated": "2026-08-31T16:07:40.138Z",
   "source": "curated",
   "sports": [
     {
@@ -608,29 +608,6 @@
     }
   ],
   "concerts": [
-    {
-      "id": "c-isaiahrashad",
-      "genres": [
-        "hiphop"
-      ],
-      "size": "mid",
-      "date": "2026-08-30",
-      "title": "Isaiah Rashad — Lil Sunny's Awful Road Trip",
-      "venue": "Rebel",
-      "price": 55,
-      "desc": "TDE's smoothest on the waterfront — Sunday show, so Monday you is someone else's problem.",
-      "links": [
-        {
-          "label": "Ticketmaster",
-          "url": "https://www.ticketmaster.ca/rebel-tickets-toronto/venue/131074",
-          "primary": true
-        },
-        {
-          "label": "SeatGeek",
-          "url": "https://seatgeek.com/search?search=Isaiah%20Rashad%20Toronto"
-        }
-      ]
-    },
     {
       "id": "c-dontoliver",
       "genres": [
