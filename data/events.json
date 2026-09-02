@@ -1,32 +1,7 @@
 {
-  "lastUpdated": "2026-09-01T13:28:00.501Z",
+  "lastUpdated": "2026-09-02T12:44:45.233Z",
   "source": "curated",
   "sports": [
-    {
-      "id": "sp-jays-0901",
-      "team": "jays",
-      "date": "2026-09-01",
-      "title": "Blue Jays vs Rays",
-      "venue": "Rogers Centre",
-      "hood": "Downtown",
-      "price": 13,
-      "desc": "Tuesday night series opener — September weeknight baseball is the cheapest big-league ticket in the city.",
-      "tags": [
-        "⚾ MLB",
-        "Weeknight deal"
-      ],
-      "links": [
-        {
-          "label": "Ticketmaster",
-          "url": "https://www.ticketmaster.ca/toronto-blue-jays-tickets/artist/806032",
-          "primary": true
-        },
-        {
-          "label": "SeatGeek",
-          "url": "https://seatgeek.com/search?search=Toronto%20Blue%20Jays"
-        }
-      ]
-    },
     {
       "id": "sp-jays-0902",
       "team": "jays",
