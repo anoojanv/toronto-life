@@ -1,36 +1,7 @@
 {
-  "lastUpdated": "2026-09-02T12:44:45.233Z",
+  "lastUpdated": "2026-09-03T12:47:42.701Z",
   "source": "curated",
   "sports": [
-    {
-      "id": "sp-jays-0902",
-      "team": "jays",
-      "date": "2026-09-02",
-      "title": "Blue Jays vs Rays",
-      "venue": "Rogers Centre",
-      "hood": "Downtown",
-      "price": 14,
-      "desc": "Midweek September baseball with playoff-race stakes. 500-level gets silly cheap by first pitch.",
-      "tags": [
-        "⚾ MLB",
-        "500-level deal"
-      ],
-      "links": [
-        {
-          "label": "Ticketmaster",
-          "url": "https://www.ticketmaster.ca/toronto-blue-jays-tickets/artist/806032",
-          "primary": true
-        },
-        {
-          "label": "SeatGeek",
-          "url": "https://seatgeek.com/search?search=Toronto%20Blue%20Jays"
-        },
-        {
-          "label": "StubHub",
-          "url": "https://www.stubhub.com/find/s/?q=Toronto%20Blue%20Jays"
-        }
-      ]
-    },
     {
       "id": "sp-jays-0903",
       "team": "jays",
@@ -583,57 +554,6 @@
     }
   ],
   "concerts": [
-    {
-      "id": "c-dontoliver",
-      "genres": [
-        "hiphop",
-        "rnb"
-      ],
-      "size": "arena",
-      "date": "2026-09-02",
-      "title": "Don Toliver",
-      "venue": "Scotiabank Arena",
-      "price": 50,
-      "desc": "Wednesday arena show — resale for weekday arena rap routinely dips under face after 4pm day-of.",
-      "links": [
-        {
-          "label": "Ticketmaster",
-          "url": "https://www.ticketmaster.ca/search?q=Don%20Toliver%20Toronto",
-          "primary": true
-        },
-        {
-          "label": "SeatGeek",
-          "url": "https://seatgeek.com/search?search=Don%20Toliver%20Toronto"
-        },
-        {
-          "label": "StubHub",
-          "url": "https://www.stubhub.com/find/s/?q=Don%20Toliver%20Toronto"
-        }
-      ]
-    },
-    {
-      "id": "c-tlc",
-      "genres": [
-        "rnb"
-      ],
-      "size": "arena",
-      "date": "2026-09-02",
-      "title": "TLC · Salt-N-Pepa · En Vogue",
-      "venue": "RBC Amphitheatre",
-      "price": 39,
-      "desc": "90s R&B royalty on the lakefront. Lawn tickets + a blanket is the move.",
-      "links": [
-        {
-          "label": "Ticketmaster",
-          "url": "https://www.ticketmaster.ca/search?q=TLC%20Toronto",
-          "primary": true
-        },
-        {
-          "label": "SeatGeek",
-          "url": "https://seatgeek.com/search?search=TLC%20Toronto"
-        }
-      ]
-    },
     {
       "id": "c-velvet",
       "genres": [
