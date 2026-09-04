@@ -1,32 +1,7 @@
 {
-  "lastUpdated": "2026-09-03T12:47:42.701Z",
+  "lastUpdated": "2026-09-04T12:41:43.780Z",
   "source": "curated",
   "sports": [
-    {
-      "id": "sp-jays-0903",
-      "team": "jays",
-      "date": "2026-09-03",
-      "title": "Blue Jays vs Rays",
-      "venue": "Rogers Centre",
-      "hood": "Downtown",
-      "price": 15,
-      "desc": "Thursday series finale — catch the game then walk to King West while the night is still young.",
-      "tags": [
-        "⚾ MLB",
-        "Pairs with King W"
-      ],
-      "links": [
-        {
-          "label": "Ticketmaster",
-          "url": "https://www.ticketmaster.ca/toronto-blue-jays-tickets/artist/806032",
-          "primary": true
-        },
-        {
-          "label": "SeatGeek",
-          "url": "https://seatgeek.com/search?search=Toronto%20Blue%20Jays"
-        }
-      ]
-    },
     {
       "id": "sp-jays-0911",
       "team": "jays",
