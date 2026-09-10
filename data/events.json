@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-09-09T12:56:25.800Z",
+  "lastUpdated": "2026-09-10T12:53:22.493Z",
   "source": "curated",
   "sports": [
     {
@@ -529,30 +529,6 @@
     }
   ],
   "concerts": [
-    {
-      "id": "c-velvet",
-      "genres": [
-        "hiphop",
-        "rnb"
-      ],
-      "size": "club",
-      "date": "2026-09-09",
-      "title": "Rising rap & R&B — Velvet Underground",
-      "venue": "Velvet Underground",
-      "price": 25,
-      "desc": "Queen West's 600-cap room: catch next year's History headliners for $20–30. Weeknight shows constantly.",
-      "links": [
-        {
-          "label": "Ticketmaster",
-          "url": "https://www.ticketmaster.ca/search?q=Velvet%20Underground%20Toronto",
-          "primary": true
-        },
-        {
-          "label": "SeatGeek",
-          "url": "https://seatgeek.com/search?search=Velvet%20Underground%20Toronto"
-        }
-      ]
-    },
     {
       "id": "c-playgrnd",
       "genres": [
