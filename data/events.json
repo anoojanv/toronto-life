@@ -1,32 +1,7 @@
 {
-  "lastUpdated": "2026-09-11T12:47:40.251Z",
+  "lastUpdated": "2026-09-12T12:08:20.048Z",
   "source": "curated",
   "sports": [
-    {
-      "id": "sp-jays-0911",
-      "team": "jays",
-      "date": "2026-09-11",
-      "title": "Blue Jays vs Orioles",
-      "venue": "Rogers Centre",
-      "hood": "Downtown",
-      "price": 22,
-      "desc": "AL East heavyweight series opener — Friday pricing, but the atmosphere earns it.",
-      "tags": [
-        "⚾ MLB",
-        "Rivalry series"
-      ],
-      "links": [
-        {
-          "label": "Ticketmaster",
-          "url": "https://www.ticketmaster.ca/toronto-blue-jays-tickets/artist/806032",
-          "primary": true
-        },
-        {
-          "label": "SeatGeek",
-          "url": "https://seatgeek.com/search?search=Toronto%20Blue%20Jays%20vs%20Orioles"
-        }
-      ]
-    },
     {
       "id": "sp-jays-0912",
       "team": "jays",
@@ -529,30 +504,6 @@
     }
   ],
   "concerts": [
-    {
-      "id": "c-playgrnd",
-      "genres": [
-        "hiphop",
-        "rnb"
-      ],
-      "size": "mid",
-      "date": "2026-09-11",
-      "title": "Playgrnd Series — Toronto anniversary party",
-      "venue": "Rebel",
-      "price": 30,
-      "desc": "The hip-hop/R&B party series takes over the waterfront mega-club for its anniversary — DJ-driven, all vibes.",
-      "links": [
-        {
-          "label": "Rebel events",
-          "url": "https://rebeltoronto.com/events/",
-          "primary": true
-        },
-        {
-          "label": "Ticketmaster",
-          "url": "https://www.ticketmaster.ca/rebel-tickets-toronto/venue/131074"
-        }
-      ]
-    },
     {
       "id": "c-channeltres",
       "genres": [
