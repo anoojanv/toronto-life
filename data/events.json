@@ -1,31 +1,7 @@
 {
-  "lastUpdated": "2026-09-12T12:08:20.048Z",
+  "lastUpdated": "2026-09-13T13:17:25.502Z",
   "source": "curated",
   "sports": [
-    {
-      "id": "sp-jays-0912",
-      "team": "jays",
-      "date": "2026-09-12",
-      "title": "Blue Jays vs Orioles",
-      "venue": "Rogers Centre",
-      "hood": "Downtown",
-      "price": 26,
-      "desc": "Saturday matinee against Baltimore — the weekend premium in action. Compare it to Monday's price.",
-      "tags": [
-        "⚾ MLB"
-      ],
-      "links": [
-        {
-          "label": "Ticketmaster",
-          "url": "https://www.ticketmaster.ca/toronto-blue-jays-tickets/artist/806032",
-          "primary": true
-        },
-        {
-          "label": "SeatGeek",
-          "url": "https://seatgeek.com/search?search=Toronto%20Blue%20Jays%20vs%20Orioles"
-        }
-      ]
-    },
     {
       "id": "sp-jays-0913",
       "team": "jays",
