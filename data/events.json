@@ -1,31 +1,7 @@
 {
-  "lastUpdated": "2026-09-13T13:17:25.502Z",
+  "lastUpdated": "2026-09-14T14:59:12.047Z",
   "source": "curated",
   "sports": [
-    {
-      "id": "sp-jays-0913",
-      "team": "jays",
-      "date": "2026-09-13",
-      "title": "Blue Jays vs Orioles",
-      "venue": "Rogers Centre",
-      "hood": "Downtown",
-      "price": 20,
-      "desc": "Sunday finale of the Baltimore series — roof open, day game, family crowd.",
-      "tags": [
-        "⚾ MLB"
-      ],
-      "links": [
-        {
-          "label": "Ticketmaster",
-          "url": "https://www.ticketmaster.ca/toronto-blue-jays-tickets/artist/806032",
-          "primary": true
-        },
-        {
-          "label": "SeatGeek",
-          "url": "https://seatgeek.com/search?search=Toronto%20Blue%20Jays"
-        }
-      ]
-    },
     {
       "id": "sp-jays-0914",
       "team": "jays",
