@@ -1,32 +1,7 @@
 {
-  "lastUpdated": "2026-09-14T14:59:12.047Z",
+  "lastUpdated": "2026-09-15T13:29:30.489Z",
   "source": "curated",
   "sports": [
-    {
-      "id": "sp-jays-0914",
-      "team": "jays",
-      "date": "2026-09-14",
-      "title": "Blue Jays vs Tigers",
-      "venue": "Rogers Centre",
-      "hood": "Downtown",
-      "price": 12,
-      "desc": "Monday night vs Detroit — historically one of the cheapest tickets of the season. Bring a glove, sit anywhere.",
-      "tags": [
-        "⚾ MLB",
-        "Cheapest of the month"
-      ],
-      "links": [
-        {
-          "label": "Ticketmaster",
-          "url": "https://www.ticketmaster.ca/toronto-blue-jays-tickets/artist/806032",
-          "primary": true
-        },
-        {
-          "label": "SeatGeek",
-          "url": "https://seatgeek.com/search?search=Toronto%20Blue%20Jays%20vs%20Tigers"
-        }
-      ]
-    },
     {
       "id": "sp-jays-0915",
       "team": "jays",
@@ -456,29 +431,6 @@
     }
   ],
   "concerts": [
-    {
-      "id": "c-channeltres",
-      "genres": [
-        "rnb"
-      ],
-      "size": "mid",
-      "date": "2026-09-14",
-      "title": "Channel Tres — The Enigma Tour",
-      "venue": "Danforth Music Hall",
-      "price": 40,
-      "desc": "Compton's house-and-R&B shapeshifter on a Monday night — the exact energy this app exists for.",
-      "links": [
-        {
-          "label": "Danforth calendar",
-          "url": "https://www.thedanforth.com/shows",
-          "primary": true
-        },
-        {
-          "label": "Ticketmaster",
-          "url": "https://www.ticketmaster.ca/the-danforth-music-hall-tickets-toronto/venue/131101"
-        }
-      ]
-    },
     {
       "id": "c-history-rnb",
       "genres": [
