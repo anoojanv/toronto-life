@@ -1,31 +1,7 @@
 {
-  "lastUpdated": "2026-09-15T13:29:30.489Z",
+  "lastUpdated": "2026-09-16T13:28:03.237Z",
   "source": "curated",
   "sports": [
-    {
-      "id": "sp-jays-0915",
-      "team": "jays",
-      "date": "2026-09-15",
-      "title": "Blue Jays vs Tigers — Roberto Clemente Day",
-      "venue": "Rogers Centre",
-      "hood": "Downtown",
-      "price": 13,
-      "desc": "Tuesday, game two vs Detroit, with the league honouring Clemente — every player wears 21.",
-      "tags": [
-        "⚾ MLB"
-      ],
-      "links": [
-        {
-          "label": "Ticketmaster",
-          "url": "https://www.ticketmaster.ca/toronto-blue-jays-tickets/artist/806032",
-          "primary": true
-        },
-        {
-          "label": "SeatGeek",
-          "url": "https://seatgeek.com/search?search=Toronto%20Blue%20Jays%20vs%20Tigers"
-        }
-      ]
-    },
     {
       "id": "sp-jays-0916",
       "team": "jays",
