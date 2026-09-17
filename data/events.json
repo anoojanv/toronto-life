@@ -1,32 +1,7 @@
 {
-  "lastUpdated": "2026-09-16T13:28:03.237Z",
+  "lastUpdated": "2026-09-17T13:23:44.652Z",
   "source": "curated",
   "sports": [
-    {
-      "id": "sp-jays-0916",
-      "team": "jays",
-      "date": "2026-09-16",
-      "title": "Blue Jays vs Tigers",
-      "venue": "Rogers Centre",
-      "hood": "Downtown",
-      "price": 13,
-      "desc": "Wednesday series finale. Get-in under $15, then you're a five-minute walk from King West for the night's second act.",
-      "tags": [
-        "⚾ MLB",
-        "Pairs with King W"
-      ],
-      "links": [
-        {
-          "label": "Ticketmaster",
-          "url": "https://www.ticketmaster.ca/toronto-blue-jays-tickets/artist/806032",
-          "primary": true
-        },
-        {
-          "label": "SeatGeek",
-          "url": "https://seatgeek.com/search?search=Toronto%20Blue%20Jays"
-        }
-      ]
-    },
     {
       "id": "sp-jays-0925",
       "team": "jays",
