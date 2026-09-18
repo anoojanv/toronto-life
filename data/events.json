@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-09-17T13:23:44.652Z",
+  "lastUpdated": "2026-09-18T12:56:17.574Z",
   "source": "curated",
   "sports": [
     {
@@ -382,29 +382,6 @@
     }
   ],
   "concerts": [
-    {
-      "id": "c-history-rnb",
-      "genres": [
-        "rnb"
-      ],
-      "size": "mid",
-      "date": "2026-09-17",
-      "title": "R&B night at History (rotating headliner)",
-      "venue": "History",
-      "price": 45,
-      "desc": "Drake's east-end venue runs a steady diet of touring R&B and rap on weeknights — check the calendar, something's always on.",
-      "links": [
-        {
-          "label": "History calendar",
-          "url": "https://www.ticketmaster.ca/search?q=History%20Toronto",
-          "primary": true
-        },
-        {
-          "label": "SeatGeek",
-          "url": "https://seatgeek.com/search?search=History%20Toronto"
-        }
-      ]
-    },
     {
       "id": "c-drakeunderground",
       "genres": [
