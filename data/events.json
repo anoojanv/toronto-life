@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-09-22T13:22:35.626Z",
+  "lastUpdated": "2026-09-23T13:35:59.915Z",
   "source": "curated",
   "sports": [
     {
@@ -382,30 +382,6 @@
     }
   ],
   "concerts": [
-    {
-      "id": "c-drakeunderground",
-      "genres": [
-        "rnb",
-        "hiphop"
-      ],
-      "size": "club",
-      "date": "2026-09-22",
-      "title": "Live R&B sessions — Drake Underground",
-      "venue": "The Drake Hotel",
-      "price": 15,
-      "desc": "The Drake Hotel's basement stage (no relation to the rapper) runs intimate soul/R&B bills — cheapest live music on Queen West.",
-      "links": [
-        {
-          "label": "Drake Hotel events",
-          "url": "https://www.thedrake.ca/thedrakehotel/",
-          "primary": true
-        },
-        {
-          "label": "Map",
-          "url": "https://www.google.com/maps/search/?api=1&query=The%20Drake%20Hotel%20Queen%20St%20W%20Toronto"
-        }
-      ]
-    },
     {
       "id": "c-rebel-hiphop",
       "genres": [
