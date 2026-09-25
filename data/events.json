@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-09-24T13:30:58.029Z",
+  "lastUpdated": "2026-09-25T13:41:46.205Z",
   "source": "curated",
   "sports": [
     {
@@ -357,29 +357,6 @@
     }
   ],
   "concerts": [
-    {
-      "id": "c-rebel-hiphop",
-      "genres": [
-        "hiphop"
-      ],
-      "size": "mid",
-      "date": "2026-09-24",
-      "title": "Rebel Thursday — touring rap showcase",
-      "venue": "Rebel",
-      "price": 30,
-      "desc": "The waterfront mega-club's concert side. Thursday shows skew cheaper and end in time for last call upstairs.",
-      "links": [
-        {
-          "label": "Rebel events",
-          "url": "https://rebeltoronto.com/events/",
-          "primary": true
-        },
-        {
-          "label": "SeatGeek",
-          "url": "https://seatgeek.com/search?search=Rebel%20Toronto"
-        }
-      ]
-    },
     {
       "id": "c-logic",
       "genres": [
