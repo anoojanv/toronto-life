@@ -1,32 +1,7 @@
 {
-  "lastUpdated": "2026-09-25T13:41:46.205Z",
+  "lastUpdated": "2026-09-26T13:01:39.342Z",
   "source": "curated",
   "sports": [
-    {
-      "id": "sp-jays-0925",
-      "team": "jays",
-      "date": "2026-09-25",
-      "title": "Blue Jays vs Reds — final homestand",
-      "venue": "Rogers Centre",
-      "hood": "Downtown",
-      "price": 18,
-      "desc": "The last regular-season home series starts tonight — final chance for Rogers Centre before any playoff run.",
-      "tags": [
-        "⚾ MLB",
-        "Final homestand"
-      ],
-      "links": [
-        {
-          "label": "Ticketmaster",
-          "url": "https://www.ticketmaster.ca/toronto-blue-jays-tickets/artist/806032",
-          "primary": true
-        },
-        {
-          "label": "SeatGeek",
-          "url": "https://seatgeek.com/search?search=Toronto%20Blue%20Jays%20vs%20Reds"
-        }
-      ]
-    },
     {
       "id": "sp-jays-0926",
       "team": "jays",
