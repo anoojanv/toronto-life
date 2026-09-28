@@ -1,32 +1,7 @@
 {
-  "lastUpdated": "2026-09-27T13:53:47.251Z",
+  "lastUpdated": "2026-09-28T16:43:35.579Z",
   "source": "curated",
   "sports": [
-    {
-      "id": "sp-jays-0927",
-      "team": "jays",
-      "date": "2026-09-27",
-      "title": "Blue Jays vs Reds — home finale",
-      "venue": "Rogers Centre",
-      "hood": "Downtown",
-      "price": 20,
-      "desc": "Last home game of the regular season. Sunday afternoon, likely emotional, definitely worth it.",
-      "tags": [
-        "⚾ MLB",
-        "Home finale"
-      ],
-      "links": [
-        {
-          "label": "Ticketmaster",
-          "url": "https://www.ticketmaster.ca/toronto-blue-jays-tickets/artist/806032",
-          "primary": true
-        },
-        {
-          "label": "SeatGeek",
-          "url": "https://seatgeek.com/search?search=Toronto%20Blue%20Jays"
-        }
-      ]
-    },
     {
       "id": "sp-tfc-1003",
       "team": "tfc",
@@ -308,29 +283,6 @@
     }
   ],
   "concerts": [
-    {
-      "id": "c-logic",
-      "genres": [
-        "hiphop"
-      ],
-      "size": "arena",
-      "date": "2026-09-27",
-      "title": "Logic · Juicy J",
-      "venue": "RBC Amphitheatre",
-      "price": 35,
-      "desc": "End-of-season amphitheatre show — last outdoor rap show of the year, lawn goes cheap.",
-      "links": [
-        {
-          "label": "Ticketmaster",
-          "url": "https://www.ticketmaster.ca/search?q=Logic%20Toronto",
-          "primary": true
-        },
-        {
-          "label": "SeatGeek",
-          "url": "https://seatgeek.com/search?search=Logic%20Toronto"
-        }
-      ]
-    },
     {
       "id": "c-massey-soul",
       "genres": [
