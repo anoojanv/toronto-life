@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-09-30T14:53:10.035Z",
+  "lastUpdated": "2026-10-01T15:24:47.191Z",
   "source": "curated",
   "sports": [
     {
@@ -283,29 +283,6 @@
     }
   ],
   "concerts": [
-    {
-      "id": "c-massey-soul",
-      "genres": [
-        "rnb"
-      ],
-      "size": "mid",
-      "date": "2026-09-30",
-      "title": "Soul & R&B night — Massey Hall (rotating bill)",
-      "venue": "Massey Hall",
-      "price": 45,
-      "desc": "The city's most beautiful room books touring soul and R&B midweek — sit anywhere, the acoustics forgive nothing and reward everything.",
-      "links": [
-        {
-          "label": "Massey Hall calendar",
-          "url": "https://masseyhall.mhrth.com/tickets/",
-          "primary": true
-        },
-        {
-          "label": "SeatGeek",
-          "url": "https://seatgeek.com/search?search=Massey%20Hall%20Toronto"
-        }
-      ]
-    },
     {
       "id": "c-reggae-danforth",
       "genres": [
