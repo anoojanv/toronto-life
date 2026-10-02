@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-10-01T15:24:47.191Z",
+  "lastUpdated": "2026-10-02T14:42:19.611Z",
   "source": "curated",
   "sports": [
     {
@@ -283,29 +283,6 @@
     }
   ],
   "concerts": [
-    {
-      "id": "c-reggae-danforth",
-      "genres": [
-        "reggae"
-      ],
-      "size": "mid",
-      "date": "2026-10-01",
-      "title": "Reggae & dancehall night — Danforth Music Hall",
-      "venue": "Danforth Music Hall",
-      "price": 40,
-      "desc": "The Danforth is Toronto's default room for touring reggae and dancehall acts — watch for Popcaan, Kranium, and Protoje-tier bookings.",
-      "links": [
-        {
-          "label": "Danforth calendar",
-          "url": "https://www.thedanforth.com/shows",
-          "primary": true
-        },
-        {
-          "label": "SeatGeek",
-          "url": "https://seatgeek.com/search?search=Danforth%20Music%20Hall"
-        }
-      ]
-    },
     {
       "id": "c-afro-history",
       "genres": [
