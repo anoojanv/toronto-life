@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-10-02T14:42:19.611Z",
+  "lastUpdated": "2026-10-03T13:19:47.242Z",
   "source": "curated",
   "sports": [
     {
@@ -23,31 +23,6 @@
         {
           "label": "SeatGeek",
           "url": "https://seatgeek.com/search?search=Toronto%20FC"
-        }
-      ]
-    },
-    {
-      "id": "sp-argos-1002",
-      "team": "argos",
-      "date": "2026-10-02",
-      "title": "Argonauts — October home game",
-      "venue": "BMO Field",
-      "hood": "Exhibition Place",
-      "price": 15,
-      "desc": "CFL playoff push, lakefront stadium, tickets regularly under $20. Criminally slept on.",
-      "tags": [
-        "🏈 CFL",
-        "Under $20"
-      ],
-      "links": [
-        {
-          "label": "Ticketmaster",
-          "url": "https://www.ticketmaster.ca/search?q=Toronto%20Argonauts",
-          "primary": true
-        },
-        {
-          "label": "SeatGeek",
-          "url": "https://seatgeek.com/search?search=Toronto%20Argonauts"
         }
       ]
     },
