@@ -1,31 +1,7 @@
 {
-  "lastUpdated": "2026-10-03T13:19:47.242Z",
+  "lastUpdated": "2026-10-04T13:54:02.531Z",
   "source": "curated",
   "sports": [
-    {
-      "id": "sp-tfc-1003",
-      "team": "tfc",
-      "date": "2026-10-03",
-      "title": "Toronto FC — October home match",
-      "venue": "BMO Field",
-      "hood": "Exhibition Place",
-      "price": 20,
-      "desc": "Late-season MLS with playoff implications on the lakefront — crisp air, loud south end.",
-      "tags": [
-        "⚽ MLS"
-      ],
-      "links": [
-        {
-          "label": "Ticketmaster",
-          "url": "https://www.ticketmaster.ca/search?q=Toronto%20FC",
-          "primary": true
-        },
-        {
-          "label": "SeatGeek",
-          "url": "https://seatgeek.com/search?search=Toronto%20FC"
-        }
-      ]
-    },
     {
       "id": "sp-argos-1024",
       "team": "argos",
