@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-10-07T15:31:12.570Z",
+  "lastUpdated": "2026-10-08T15:32:29.077Z",
   "source": "curated",
   "sports": [
     {
@@ -23,35 +23,6 @@
         {
           "label": "SeatGeek",
           "url": "https://seatgeek.com/search?search=Toronto%20Argonauts"
-        }
-      ]
-    },
-    {
-      "id": "sp-raps-1007",
-      "team": "raptors",
-      "date": "2026-10-07",
-      "title": "Raptors preseason opener",
-      "venue": "Scotiabank Arena",
-      "hood": "Downtown",
-      "price": 20,
-      "desc": "The cheapest way to sit close at Scotiabank all year — preseason lower-bowl seats go for weekend-upper-bowl money.",
-      "tags": [
-        "🏀 NBA",
-        "Lower bowl deal"
-      ],
-      "links": [
-        {
-          "label": "Ticketmaster",
-          "url": "https://www.ticketmaster.ca/search?q=Toronto%20Raptors",
-          "primary": true
-        },
-        {
-          "label": "SeatGeek",
-          "url": "https://seatgeek.com/search?search=Toronto%20Raptors"
-        },
-        {
-          "label": "StubHub",
-          "url": "https://www.stubhub.com/find/s/?q=Toronto%20Raptors"
         }
       ]
     },
