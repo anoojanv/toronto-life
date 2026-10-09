@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-10-08T15:32:29.077Z",
+  "lastUpdated": "2026-10-09T15:14:51.525Z",
   "source": "curated",
   "sports": [
     {
@@ -205,29 +205,6 @@
     }
   ],
   "concerts": [
-    {
-      "id": "c-afro-history",
-      "genres": [
-        "afro"
-      ],
-      "size": "mid",
-      "date": "2026-10-08",
-      "title": "Afrobeats live — touring showcase",
-      "venue": "History",
-      "price": 45,
-      "desc": "Toronto is a top-3 afrobeats market in North America — Rema/Asake/Ayra Starr-tier acts route through History and Coca-Cola Coliseum.",
-      "links": [
-        {
-          "label": "Ticketmaster",
-          "url": "https://www.ticketmaster.ca/search?q=afrobeats%20Toronto",
-          "primary": true
-        },
-        {
-          "label": "SeatGeek",
-          "url": "https://seatgeek.com/search?search=afrobeats%20Toronto"
-        }
-      ]
-    },
     {
       "id": "c-dancehall-coliseum",
       "genres": [
