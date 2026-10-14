@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-10-13T15:54:24.203Z",
+  "lastUpdated": "2026-10-14T13:39:03.342Z",
   "source": "curated",
   "sports": [
     {
@@ -97,35 +97,6 @@
         {
           "label": "SeatGeek",
           "url": "https://seatgeek.com/search?search=Toronto%20Raptors"
-        }
-      ]
-    },
-    {
-      "id": "sp-leafs-1013",
-      "team": "leafs",
-      "date": "2026-10-13",
-      "title": "Maple Leafs — weeknight vs non-rival",
-      "venue": "Scotiabank Arena",
-      "hood": "Downtown",
-      "price": 55,
-      "desc": "The only affordable Leafs formula: Tuesday, non-Original-Six opponent, standing room or 300-level singles.",
-      "tags": [
-        "🏒 NHL",
-        "Standing room"
-      ],
-      "links": [
-        {
-          "label": "Ticketmaster",
-          "url": "https://www.ticketmaster.ca/search?q=Toronto%20Maple%20Leafs",
-          "primary": true
-        },
-        {
-          "label": "SeatGeek",
-          "url": "https://seatgeek.com/search?search=Toronto%20Maple%20Leafs"
-        },
-        {
-          "label": "StubHub",
-          "url": "https://www.stubhub.com/find/s/?q=Toronto%20Maple%20Leafs"
         }
       ]
     },
