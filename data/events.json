@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-10-16T13:12:28.148Z",
+  "lastUpdated": "2026-10-17T12:08:57.034Z",
   "source": "curated",
   "sports": [
     {
@@ -151,30 +151,6 @@
     }
   ],
   "concerts": [
-    {
-      "id": "c-dancehall-coliseum",
-      "genres": [
-        "reggae",
-        "afro"
-      ],
-      "size": "mid",
-      "date": "2026-10-16",
-      "title": "Dancehall & afrobeats — Coca-Cola Coliseum (touring bill)",
-      "venue": "Coca-Cola Coliseum",
-      "price": 55,
-      "desc": "The Exhibition Place arena hosts the bigger Caribbean and West African tours — Friday-night carnival energy indoors.",
-      "links": [
-        {
-          "label": "Ticketmaster",
-          "url": "https://www.ticketmaster.ca/search?q=Coca-Cola%20Coliseum",
-          "primary": true
-        },
-        {
-          "label": "SeatGeek",
-          "url": "https://seatgeek.com/search?search=Coca-Cola%20Coliseum%20Toronto"
-        }
-      ]
-    },
     {
       "id": "c-velvet-oct",
       "genres": [
