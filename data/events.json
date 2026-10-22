@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-10-21T13:43:12.714Z",
+  "lastUpdated": "2026-10-22T13:43:53.186Z",
   "source": "curated",
   "sports": [
     {
@@ -150,31 +150,7 @@
       ]
     }
   ],
-  "concerts": [
-    {
-      "id": "c-velvet-oct",
-      "genres": [
-        "hiphop"
-      ],
-      "size": "club",
-      "date": "2026-10-21",
-      "title": "Midweek rap bill — Velvet Underground",
-      "venue": "Velvet Underground",
-      "price": 22,
-      "desc": "Wednesday club show on Queen West — $20-something for artists who'll cost $60 next tour.",
-      "links": [
-        {
-          "label": "Ticketmaster",
-          "url": "https://www.ticketmaster.ca/search?q=Velvet%20Underground%20Toronto",
-          "primary": true
-        },
-        {
-          "label": "SeatGeek",
-          "url": "https://seatgeek.com/search?search=Velvet%20Underground%20Toronto"
-        }
-      ]
-    }
-  ],
+  "concerts": [],
   "artistWatch": [
     {
       "name": "Drake",
