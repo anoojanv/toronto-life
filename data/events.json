@@ -1,32 +1,7 @@
 {
-  "lastUpdated": "2026-10-28T15:03:19.025Z",
+  "lastUpdated": "2026-10-29T15:11:10.152Z",
   "source": "curated",
   "sports": [
-    {
-      "id": "sp-raps-1028",
-      "team": "raptors",
-      "date": "2026-10-28",
-      "title": "Raptors — early-season weeknight game",
-      "venue": "Scotiabank Arena",
-      "hood": "Downtown",
-      "price": 28,
-      "desc": "October/November Wednesdays vs non-marquee teams are the sweet spot before holiday pricing kicks in.",
-      "tags": [
-        "🏀 NBA",
-        "Weeknight sweet spot"
-      ],
-      "links": [
-        {
-          "label": "Ticketmaster",
-          "url": "https://www.ticketmaster.ca/search?q=Toronto%20Raptors",
-          "primary": true
-        },
-        {
-          "label": "SeatGeek",
-          "url": "https://seatgeek.com/search?search=Toronto%20Raptors"
-        }
-      ]
-    },
     {
       "id": "sp-raps-1104",
       "team": "raptors",
