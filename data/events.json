@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-11-03T16:09:08.788Z",
+  "lastUpdated": "2026-11-04T16:13:29.538Z",
   "source": "curated",
   "sports": [
     {
@@ -23,30 +23,6 @@
         {
           "label": "SeatGeek",
           "url": "https://seatgeek.com/search?search=Toronto%20Raptors"
-        }
-      ]
-    },
-    {
-      "id": "sp-leafs-1103",
-      "team": "leafs",
-      "date": "2026-11-03",
-      "title": "Maple Leafs — November weeknight game",
-      "venue": "Scotiabank Arena",
-      "hood": "Downtown",
-      "price": 58,
-      "desc": "Tuesday-night hockey: still pricey because it's the Leafs, but this is as low as it gets in-season.",
-      "tags": [
-        "🏒 NHL"
-      ],
-      "links": [
-        {
-          "label": "Ticketmaster",
-          "url": "https://www.ticketmaster.ca/search?q=Toronto%20Maple%20Leafs",
-          "primary": true
-        },
-        {
-          "label": "SeatGeek",
-          "url": "https://seatgeek.com/search?search=Toronto%20Maple%20Leafs"
         }
       ]
     },
