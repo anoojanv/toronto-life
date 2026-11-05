@@ -1,31 +1,7 @@
 {
-  "lastUpdated": "2026-11-04T16:13:29.538Z",
+  "lastUpdated": "2026-11-05T16:25:31.167Z",
   "source": "curated",
   "sports": [
-    {
-      "id": "sp-raps-1104",
-      "team": "raptors",
-      "date": "2026-11-04",
-      "title": "Raptors — November weeknight game",
-      "venue": "Scotiabank Arena",
-      "hood": "Downtown",
-      "price": 26,
-      "desc": "Early-November Wednesday hoops — resale softens all afternoon on game day. Watch for mobile-only drops.",
-      "tags": [
-        "🏀 NBA"
-      ],
-      "links": [
-        {
-          "label": "Ticketmaster",
-          "url": "https://www.ticketmaster.ca/search?q=Toronto%20Raptors",
-          "primary": true
-        },
-        {
-          "label": "SeatGeek",
-          "url": "https://seatgeek.com/search?search=Toronto%20Raptors"
-        }
-      ]
-    },
     {
       "id": "sp-905-1112",
       "team": "farm",
