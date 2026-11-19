@@ -1,33 +1,7 @@
 {
-  "lastUpdated": "2026-11-18T17:11:53.089Z",
+  "lastUpdated": "2026-11-19T17:19:24.910Z",
   "source": "curated",
-  "sports": [
-    {
-      "id": "sp-marlies-1118",
-      "team": "farm",
-      "date": "2026-11-18",
-      "title": "Marlies — weeknight AHL hockey",
-      "venue": "Coca-Cola Coliseum",
-      "hood": "Exhibition Place",
-      "price": 20,
-      "desc": "Pro hockey at 1/6th the Leafs price, and half the roster will be up with the big club by spring.",
-      "tags": [
-        "🏒 AHL",
-        "Family cheap"
-      ],
-      "links": [
-        {
-          "label": "Ticketmaster",
-          "url": "https://www.ticketmaster.ca/search?q=Toronto%20Marlies",
-          "primary": true
-        },
-        {
-          "label": "SeatGeek",
-          "url": "https://seatgeek.com/search?search=Toronto%20Marlies"
-        }
-      ]
-    }
-  ],
+  "sports": [],
   "concerts": [],
   "artistWatch": [
     {
